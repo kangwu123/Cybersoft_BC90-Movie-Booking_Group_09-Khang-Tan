@@ -1,20 +1,32 @@
-import React, { useEffect } from 'react'
+import { useEffect ,useState } from 'react'
 import { useParams } from "react-router-dom";
-import { fetchMovieDetail } from './slice'
+import { fetchMovieDetail,fetchCinemaList, fetchCinema, fetchTimeShow } from './slice'
 import { useDispatch, useSelector } from 'react-redux';
 import ListCinema from './ListCinema';
 import Cinema from './cinema';
+import TimeShow from './TimeShow';
 
 const MovieDetail = () => {
     const { maPhim } = useParams();
     const dispatch = useDispatch();
     const state = useSelector((state) => state.movieDetailReducer);
+    const [selectedMaHeThongRap, setSelectedMaHeThongRap] = useState(null);
 
-    const { dataDetail, dataCinemaList, dataCinema, loading } = state
+    const { dataDetail, dataCinemaList, dataCinema, dataTimeShow, loading } = state
 
     useEffect(() => {
         dispatch(fetchMovieDetail(maPhim));
+        dispatch(fetchCinemaList());
     }, [dispatch, maPhim]);
+
+    const handleSelectCinemaSystem = (maHeThongRap) => {
+        setSelectedMaHeThongRap(maHeThongRap);
+    }
+    useEffect(() => {
+        if (!selectedMaHeThongRap) return;
+        dispatch(fetchCinema(selectedMaHeThongRap));
+        dispatch(fetchTimeShow(selectedMaHeThongRap));
+    }, [dispatch, selectedMaHeThongRap]);
 
     if (loading) {
         return (
@@ -50,8 +62,27 @@ const MovieDetail = () => {
 
     const renderEachCinemas = () => {
         return dataCinema?.map((cinema) => (
-            <Cinema key={cinema.maCumRap} propEachCinema={cinema} />
+            <Cinema key={cinema.maCumRap} 
+            propEachCinema={cinema} 
+            onSelectEachCinema={renderTimeShow} />
         ));
+    };
+
+    const renderTimeShow = (tenRap) => {
+        return dataTimeShow?.map((heThongRap) => {
+            return heThongRap.lstCumRap.map((cumRap) => {
+                return cumRap.danhSachPhim.map((phim) => {
+                    return phim.lstLichChieuTheoPhim
+                        .filter((lichChieu) => lichChieu.tenRap === tenRap)
+                        .map((lichChieu) => (
+                            <TimeShow
+                                key={lichChieu.maLichChieu}
+                                propTimeShow={lichChieu}
+                            />
+                        ));
+                });
+            });
+        });
     };
 
     return (
@@ -136,9 +167,7 @@ const MovieDetail = () => {
                             {renderListCinema()}
                         </div>
                     </div>
-
                     {renderEachCinemas()}
-                    {/* {renderTimeShow()} */}
                 </div>
             </div>
         </div>
