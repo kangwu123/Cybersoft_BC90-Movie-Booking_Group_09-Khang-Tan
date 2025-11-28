@@ -1,30 +1,30 @@
-import {memo} from 'react'
+import { memo } from 'react'
 
-const Cinema = ({propEachCinema}) => {
-   const renderEachCinema = () => {
+const Cinema = ({ propEachCinema, onSelectEachCinema }) => {
+    const renderTimeShow = (tenRap) => {
+        return onSelectEachCinema(tenRap);
+    }
+    const renderEachCinema = () => {
         return propEachCinema.danhSachRap.map((eachCinema) => {
             return (
                 <tr key={eachCinema.maRap} className="border-t border-white">
                     <td className="px-10 py-4 bg-gray-900 text-white font-semibold border-r border-white">
                         {eachCinema.tenRap}
                     </td>
-
-                    <td colSpan={7} className="px-4 py-4 bg-gray-900">
-                        <div className="flex items-center gap-4">
-                            {/* <TimeShow /> */}
+                    <td colSpan={8} className="px-4 py-4 bg-gray-900">
+                        <div className="flex flex-wrap items-center gap-4">
+                            {renderTimeShow(eachCinema.tenRap)}
                         </div>
                     </td>
                 </tr>
             )
         })
     }
-
     return (
-     <div key={propEachCinema.maCumRap} className="overflow-x-auto mt-6">
-
-            <table className="w-full shadow-xl bg-black">
+        <div key={propEachCinema.maCumRap} className="mt-6">
+            <table className="w-full shadow-xl bg-black table-fixed">
                 <thead>
-                    <tr className=" text-white">
+                    <tr className="text-white">
                         <th className="bg-indigo-900 text-white p-4 border-r border-amber-400 align-top text-left">
                             <h3 className="text-xl font-bold mb-0 leading-snug">
                                 {propEachCinema.tenCumRap}
@@ -63,7 +63,7 @@ const Cinema = ({propEachCinema}) => {
                 </tbody>
             </table>
         </div>
-  )
+    )
 }
 
 export default memo(Cinema)

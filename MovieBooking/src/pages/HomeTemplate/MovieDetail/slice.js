@@ -6,9 +6,10 @@ const initialState = {
   dataDetail: null,
   dataCinemaList: null,
   dataCinema: null,
+  dataTimeShow: null,
   error: null,
 };
-
+// Declare const Fetch Data base API Movie Detail
 export const fetchMovieDetail = createAsyncThunk(
   "movie-detail/fetchMovieDetail",
   async (id, { rejectWithValue }) => {
@@ -66,9 +67,28 @@ export const fetchCinema = createAsyncThunk(
     }
   }
 );
+// Declare const Fetch Data base API TimeShow
+export const fetchTimeShow = createAsyncThunk(
+  "movie/fetchTimeShow",
+  async (maHeThongRap, { rejectWithValue }) => {
+    try {
+      const result = await axios({
+        url: `https://movienew.cybersoft.edu.vn/api/QuanLyRap/LayThongTinLichChieuHeThongRap?maHeThongRap=${maHeThongRap}&maNhom=GP07`,
+        method: "GET",
+        headers: {
+          TokenCybersoft:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA5MCIsIkhldEhhblN0cmluZyI6IjI5LzA1LzIwMjYiLCJIZXRIYW5UaW1lIjoiMTc4MDAxMjgwMDAwMCIsIm5iZiI6MTc1MzAzMDgwMCwiZXhwIjoxNzgwMTYwNDAwfQ.KkGRtLpEsgoM4M_TapjOZIzvAwbay3QvXIwwN8XUqWk",
+        },
+      });
+      return result.data.content;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 
-const movieDetailSlice = createSlice({
-  name: "movieDetailSlice",
+const movieSlice = createSlice({
+  name: "movieSlice",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -113,7 +133,19 @@ const movieDetailSlice = createSlice({
       state.error = action.payload;
     });
 
+      // TIME SHOW
+    builder.addCase(fetchTimeShow.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchTimeShow.fulfilled, (state, action) => {
+      state.loading = false;
+      state.dataTimeShow = action.payload;
+    });
+    builder.addCase(fetchTimeShow.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
   },
 });
 
-export default movieDetailSlice.reducer;
+export default movieSlice.reducer;

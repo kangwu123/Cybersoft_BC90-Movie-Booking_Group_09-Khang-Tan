@@ -32,11 +32,9 @@ export default function HomeHeader() {
     <header className="top-0 left-0 z-40 w-full flex items-center justify-between px-4 md:px-6 lg:px-8 py-3">
       <div className="container mx-auto flex justify-between items-center ">
         <NavLink to="/" className="max-md:flex-1">
-          <img
-            src="./img/Logo.png"
-            alt="CinemaProduction Logo"
-            className="w-36 h-auto object-contain hover:opacity-90 transition"
-          />
+          <img className="w-36 h-16 object-cover hover:opacity-90 transition"
+            src="/img/Logo.png"
+            alt="CinemaProduction Logo"/>
         </NavLink>
 
         {/* Desktop Navbar */}
@@ -396,7 +394,7 @@ export default function HomeHeader() {
                   }
                 >
                   <div>
-                    <i className="fi fi-rs-ticket text-2xl text-transparent bg-clip-text bg-linear-to-r from-yellow-300 via-yellow-400 to-yellow-500"></i>
+                    <i className="fi fi-rs-ticket text-2xl text-transparent bg-clip-text bg-linear-to-r from-red-500 via-yellow-500 to-green-700"></i>
                   </div>
                   <span className="text-sm mt-1 group-hover:text-red-400">Buy Tickets</span>
                   <span
