@@ -1,9 +1,11 @@
-import { useEffect ,useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom";
-import { fetchMovieDetail,fetchCinemaList, fetchCinema, fetchTimeShow } from './slice'
+import { fetchMovieDetail, fetchCinemaList, fetchCinema, fetchTimeShow } from './slice'
 import { useDispatch, useSelector } from 'react-redux';
+import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
 import ListCinema from './ListCinema';
-import Cinema from './cinema';
+import Cinema from './Cinema';
 import TimeShow from './TimeShow';
 
 const MovieDetail = () => {
@@ -13,6 +15,7 @@ const MovieDetail = () => {
     const [selectedMaHeThongRap, setSelectedMaHeThongRap] = useState(null);
 
     const { dataDetail, dataCinemaList, dataCinema, dataTimeShow, loading } = state
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         dispatch(fetchMovieDetail(maPhim));
@@ -27,21 +30,26 @@ const MovieDetail = () => {
         dispatch(fetchCinema(selectedMaHeThongRap));
         dispatch(fetchTimeShow(selectedMaHeThongRap));
     }, [dispatch, selectedMaHeThongRap]);
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
+        }, 800);
+        return () => {
+            clearInterval(timer);
+        };
+    }, []);
 
-    if (loading) {
+    if (loading || !dataDetail) {
         return (
-            <div className="p-6 space-y-6 animate-pulse">
-                <div className="w-full h-80 bg-gray-300/70 rounded-xl"></div>
-
-                <div className="h-7 bg-gray-300/70 rounded w-2/3"></div>
-
-                <div className="space-y-3">
-                    <div className="h-4 bg-gray-300/70 rounded w-full"></div>
-                    <div className="h-4 bg-gray-300/70 rounded w-5/6"></div>
-                    <div className="h-4 bg-gray-300/70 rounded w-4/6"></div>
-                </div>
-
-                <div className="h-12 bg-gray-300/70 rounded-xl w-40"></div>
+            <div className="flex justify-center items-center h-screen">
+                <Stack spacing={2} direction="row">
+                    <CircularProgress
+                        enableTrackSlot
+                        variant="determinate"
+                        color="secondary"
+                        value={progress}
+                    />
+                </Stack>
             </div>
         )
     }
@@ -62,9 +70,9 @@ const MovieDetail = () => {
 
     const renderEachCinemas = () => {
         return dataCinema?.map((cinema) => (
-            <Cinema key={cinema.maCumRap} 
-            propEachCinema={cinema} 
-            onSelectEachCinema={renderTimeShow} />
+            <Cinema key={cinema.maCumRap}
+                propEachCinema={cinema}
+                onSelectEachCinema={renderTimeShow} />
         ));
     };
 
