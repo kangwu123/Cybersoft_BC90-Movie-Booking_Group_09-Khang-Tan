@@ -12,6 +12,7 @@ import { fetchMovieCarousel } from './slice';
 import Movie from '../MovieList/movie';
 
 const Home = () => {
+  const [activeTab, setActiveTab] = useState('now');
   const carouselSlide = {
     dots: true,
     arrows: true,
@@ -26,7 +27,45 @@ const Home = () => {
     waitForAnimate: false
   };
 
+  const moviesSlide = {
+        dots: false,
+        arrows: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        cssEase: "linear",
+        waitForAnimate: false,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
+    };
   const dispatch = useDispatch();
+  
   const stateList = useSelector((state) => state.movieListReducer);
 
   const stateCarousel = useSelector((state) => state.movieCarouselReducer);
@@ -306,7 +345,126 @@ const Home = () => {
           </div>
         </Slider>
       </div>
+      {/* DEAL BANNER */}
+      <div className="transition-all duration-300 pb-15">
+        <div className="container mx-auto">
+          <NavLink to="/now-showing">
+            <img
+              src="/img/Banners/carousel5.jpg"
+              className="w-full object-cover rounded-xl"
+              alt="deal"
+            />
+          </NavLink>
+        </div>
+      </div>
 
+      {/* MOVIES TABS */}
+      <div className="pb-15">
+        <div className="container relative">
+          <div className="absolute top-0 left-0">
+            <div className="relative inline px-1 py-10 rounded-l-lg text-shadow-amber-500 font-bold text-xl text-amber-300 bg-green-800">
+             Featured Movies
+              <span
+                className="absolute top-1/2 right-0 transform translate-x-full -translate-y-1/2"
+                style={{
+                  width: 0,
+                  height: 0,
+                  borderTop: '52px solid transparent',
+                  borderBottom: '52px solid transparent',
+                  borderLeft: '52px solid #06402B',
+                }}
+              ></span>
+            </div>
+          </div>
+
+          <div className="flex justify-center text-lg font-bold mt-4">
+            <button
+              className={`${activeTab === 'now'
+                ? 'text-red-500 border-b-2 border-red-600 text-3xl font-extrabold mb-6 pb-2'
+                : 'text-gray-800 text-3xl font-extrabold mb-6 pb-2'
+                } hover:text-red-600 transition-colors duration-200 cursor-pointer`}
+              onClick={() => setActiveTab('now')}
+            >
+              NOW SHOWING
+            </button>
+            <button
+              className={`${activeTab === 'upcoming'
+                ? 'text-red-500 border-b-2 border-red-600 text-3xl font-extrabold mb-6 pb-2 ml-5'
+                : 'text-gray-800 text-3xl font-extrabold mb-6 pb-2 ml-5'
+                } hover:text-red-600 transition-colors duration-200 cursor-pointer`}
+              onClick={() => setActiveTab('upcoming')}
+            >
+              UPCOMING
+            </button>
+          </div>
+        </div>
+
+        {activeTab === 'now' && (
+          <div className="py-8">
+            <div className='container'>
+              <div className="flex items-center mb-6">
+                <div className="flex flex-col justify-center flex-1 gap-1">
+                  <div className="border-t-2 border-black h-0.5"></div>
+                  <div className="border-t-2 border-black h-0.5"></div>
+                </div>
+                <h2 className="text-3xl font-extrabold text-black px-4">TOP MOVIES</h2>
+                <div className="flex flex-col justify-center flex-1 gap-1">
+                  <div className="border-t-2 border-black h-0.5"></div>
+                  <div className="border-t-2 border-black h-0.5"></div>
+                </div>
+              </div>
+
+              <div className="slider-container relative">
+                <Slider className="movies-carousel" {...moviesSlide}>
+                  {renderNowMovieList()}
+                </Slider>
+              </div>
+
+              <div className="flex justify-center items-center mt-6">
+                <NavLink
+                  to="/movie-list"
+                  className="relative inline-block text-red-500 font-semibold bg-white hover:bg-red-500 border hover:text-white border-red-500 hover:border-red-500 rounded-lg px-6 py-3 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer"
+                >
+                  SHOW MORE
+                </NavLink>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'upcoming' && (
+          <div className="py-8 bg-black">
+            <div className='container'>
+              <div className="flex items-center mb-6">
+                <div className="flex flex-col justify-center flex-1 gap-1">
+                  <div className="border-t-2 border-amber-500 h-0.5"></div>
+                  <div className="border-t-2 border-amber-500 h-0.5"></div>
+                </div>
+                <h2 className="text-3xl font-extrabold text-amber-500 px-4">COMING SOON</h2>
+                <div className="flex flex-col justify-center flex-1 gap-1">
+                  <div className="border-t-2 border-amber-500 h-0.5"></div>
+                  <div className="border-t-2 border-amber-500 h-0.5"></div>
+                </div>
+              </div>
+
+              <div className="slider-container relative">
+                <Slider className="movies-carousel" {...moviesSlide}>
+                  {renderUpComingMovieList()}
+                </Slider>
+              </div>
+
+              <div className="flex justify-center items-center mt-6">
+                <NavLink
+                  to="/movie-list"
+                  className="relative inline-block text-amber-500 font-semibold bg-black hover:bg-amber-500 border hover:text-black border-amber-500 hover:border-amber-500 rounded-lg px-6 py-3 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer"
+                >
+                  SHOW MORE
+                </NavLink>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </>
   )
 }
