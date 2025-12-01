@@ -16,7 +16,6 @@ body{
     color: white;
     background-color: #09090B;
 }
-
 /* NAV BUTTONS */
 .slick-prev,
 .slick-next {
@@ -263,3 +262,149 @@ body{
 .back-button:hover {
   background-color: #e05c9f;
 }
+
+/* AdminTemplate styles */
+.admin-layout{
+  display:flex;
+  min-height:100vh;
+}
+
+.flex-5{ flex: 5; }
+
+.admin-aside{
+  background: #0b0b0b;
+  color: #fff;
+  width: 280px; /* expanded width */
+  transition: width 250ms ease-in-out;
+  overflow: hidden;
+}
+
+.admin-aside.collapsed{
+  width: 72px; /* icon-only width */
+}
+
+.admin-aside .logo img{
+  width:120px;
+}
+
+.admin-aside.collapsed .logo img{
+  width:48px;
+}
+
+.admin-aside nav .nav-item {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.admin-aside .nav-label{
+  display:inline-block;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.admin-aside.collapsed .nav-label{
+  opacity: 0;
+  transform: translateX(-12px);
+  width:0;
+  height:0;
+  pointer-events:none;
+}
+
+.admin-aside.collapsed nav a{
+  justify-content:center; /* center icons when collapsed */
+}
+
+.toggle-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.toggle-btn .bar-icon{
+  display:block;
+  font-size:18px;
+  transition: transform 200ms ease;
+}
+
+.toggle-btn.rotated .bar-icon{
+  transform: rotate(45deg);
+}
+
+.theme-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  transition: transform 180ms ease;
+}
+.theme-toggle .fa-solid{
+  font-size: 18px;
+}
+.theme-toggle:hover{ transform: scale(1.05); }
+
+/* For responsive screens stack layout & show toggle button on top left */
+@media (max-width: 768px){
+  .admin-aside{
+    position:fixed;
+    z-index:50;
+    left:0;
+    top:0;
+    bottom:0;
+  }
+
+  .admin-aside.collapsed{
+    left: -72px; /* hidden when collapsed on mobile */
+  }
+
+  .admin-aside.open-mobile{
+    left: 0; /* when explicitly opened on mobile */
+  }
+
+/* Light theme overrides (applied via body.theme-light) */
+.theme-light .admin-aside{
+  background: #ffffff;
+  color: #111;
+}
+.theme-light .admin-aside .logo img{ filter: none }
+.theme-light .admin-aside a{ color:#1f2937 }
+.theme-light .bg-gray-200{ background-color: #f3f4f6 !important; }
+.theme-light header{ background: #ffffff; }
+.theme-light .breadcrumb{ color: #6b7280; }
+
+  .content-container{
+    /* Allow content to flow next to the aside in desktop
+       On mobile this gets a padding-left to avoid hiding content under fixed aside */
+    padding-left: 0;
+    flex:1;
+  }
+}
+
+/* Breadcrumb & content center style */
+.breadcrumb{
+  color: #6b7280; /* gray-500 */
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto; /* center */
+}
+
+/* Light theme overrides */
+body.theme-light{
+  color: #111827; /* gray-900 */
+  background-color: #F9FAFB; /* light */
+}
+body.theme-light header{ background: #fff; }
+body.theme-light .bg-gray-200{ background-color: #f3f4f6 !important; }
+body.theme-light .text-gray-700{ color: #374151 !important; }
+body.theme-light .text-gray-900{ color: #111827 !important; }
