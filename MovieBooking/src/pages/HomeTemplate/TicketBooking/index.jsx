@@ -1,11 +1,5 @@
-import React from 'react'
+// index.jsx
+import TicketBooking from './TicketBooking';
 
-const TicketBooking = () => {
-    return (
-        <div>
-            Đây là trang đặt vé phim
-        </div>
-    )
-}
-
-export default TicketBooking
+// re-export default
+export default TicketBooking;
