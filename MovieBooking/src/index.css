@@ -17,6 +17,15 @@ body{
     background-color: #09090B;
 }
 
+.admin-aside{
+    color: #f1345f;
+    background-color: #ffffff;
+}
+
+.dark .admin-aside{
+    color: #f1345f; /* gray-100 */
+    background-color: #09090B;
+}
 /* NAV BUTTONS */
 .slick-prev,
 .slick-next {
@@ -190,7 +199,6 @@ body{
   transform: rotate(15deg);
 }
 
-
 .astronaut-container {
   width: 150px;
   height: 150px;
@@ -262,4 +270,209 @@ body{
 
 .back-button:hover {
   background-color: #e05c9f;
+}
+
+/* AdminTemplate styles */
+.admin-layout{
+  display:flex;
+  min-height:100vh;
+}
+
+.flex-5{ flex: 5; }
+
+.admin-aside{
+  background: #f1345f;
+  color: #343a40;
+  width: 280px; /* expanded width */
+  transition: width 250ms ease-in-out;
+  overflow: hidden;
+}
+
+.dark .admin-aside{
+  background: #0b0b0b;
+  color: #fff;
+}
+
+.admin-aside.collapsed{
+  width: 72px; /* icon-only width */
+}
+
+.admin-aside .logo img{
+  width:120px;
+}
+
+.admin-aside.collapsed .logo img{
+  width:48px;
+}
+
+.admin-aside nav .nav-item {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.admin-aside .nav-label{
+  display:inline-block;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.admin-aside.collapsed .nav-label{
+  opacity: 0;
+  transform: translateX(-12px);
+  width:0;
+  height:0;
+  pointer-events:none;
+}
+
+.admin-aside.collapsed nav a{
+  justify-content:center; /* center icons when collapsed */
+}
+
+.toggle-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.toggle-btn .bar-icon{
+  display:block;
+  font-size:18px;
+  transition: transform 200ms ease;
+}
+
+.dark .toggle-btn{
+  color: #fff;
+}
+
+.toggle-btn.rotated .bar-icon{
+  transform: rotate(45deg);
+}
+
+.theme-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  transition: transform 180ms ease;
+}
+.theme-toggle .fa-solid{
+  font-size: 18px;
+}
+.theme-toggle:hover{ transform: scale(1.05); }
+
+/* For responsive screens stack layout & show toggle button on top left */
+@media (max-width: 768px){
+  .admin-aside{
+    position:fixed;
+    z-index:50;
+    left:0;
+    top:0;
+    bottom:0;
+  }
+
+  .admin-aside.collapsed{
+    left: -72px; /* hidden when collapsed on mobile */
+  }
+
+  .admin-aside.open-mobile{
+    left: 0; /* when explicitly opened on mobile */
+  }
+
+
+  .content-container{
+    /* Allow content to flow next to the aside in desktop
+       On mobile this gets a padding-left to avoid hiding content under fixed aside */
+    padding-left: 0;
+    flex:1;
+  }
+}
+
+/* Breadcrumb & content center style */
+.breadcrumb{
+  color: #f1345f;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto; /* center */
+}
+
+/* Light theme adjustments */
+.theme-toggle-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #a0aec0; 
+  border-radius: 9999px; 
+  cursor: pointer;
+  padding: 0.25rem;
+  width: 4rem;
+  height: 2rem;
+  position: relative;
+  border: 1px solid #cbd5e0; 
+}
+
+.dark .theme-toggle-switch {
+  background-color: #2d3748; /* gray-800 */
+  border: 1px solid #4a5568; /* gray-600 */
+}
+
+.sun-icon,
+.moon-icon {
+  color: #f7fafc; /* gray-100 */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dark .sun-icon {
+  color: #f7fafc; /* gray-100 */
+}
+
+.dark .moon-icon {
+  color: #f7fafc; /* gray-100 */
+}
+
+.sun-icon.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.sun-icon:not(.active) {
+  opacity: 0;
+  transform: scale(0);
+  position: absolute;
+}
+
+.moon-icon.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.moon-icon:not(.active) {
+  opacity: 0;
+  transform: scale(0);
+  position: absolute;
+}
+
+/* Light theme adjustments */
+.theme-light .theme-toggle-switch {
+  background-color: #a0aec0; /* gray-400 */
+  border-color: #cbd5e0; /* gray-300 */
+}
+
+.theme-light .sun-icon {
+  color: #fefcbf; /* yellow-200 */
+}
+
+.theme-light .moon-icon {
+  color: #4a5568; /* gray-600 */
 }
