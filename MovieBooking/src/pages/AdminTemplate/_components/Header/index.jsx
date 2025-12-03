@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom'
 
 const AdminHeader = () => {
     const [collapsed, setCollapsed] = useState(false)
-    const [dark, setDark] = useState(false)
     const [isMobile, setIsMobile] = useState(false)
 
     useEffect(() => {
