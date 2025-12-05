@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchMovieList } from '../../HomeTemplate/MovieList/slice'
 import Movie from './movie'
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const Movies = () => {
     const [showModal, setShowModal] = useState(false);
@@ -47,7 +49,7 @@ const Movies = () => {
     const renderNowMovieList = () => {
         return data?.map((movie) => {
             if (movie.dangChieu) {
-                return <Movie key={data.maPhim} propMovie={movie} />
+                return <Movie key={movie.maPhim} propMovie={movie} />
             }
         })
     }
@@ -55,15 +57,14 @@ const Movies = () => {
     const renderUpComingMovieList = () => {
         return data?.map((movie) => {
             if (!movie.dangChieu) {
-                return <Movie key={data.maPhim} propMovie={movie} />
+                return <Movie key={movie.maPhim} propMovie={movie} />
             }
         })
     }
 
     return (
         <div className="pt-0.5">
-           <h1 className="text-3xl font-bold text-black dark:text-amber-600 mb-6">Movies Management</h1>
-
+        <h1 className="text-3xl font-bold text-black dark:text-amber-600 mb-6">Movies Management</h1>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div className="flex flex-col md:flex-row md:items-center gap-4 w-full md:w-2/3">
                     <input
