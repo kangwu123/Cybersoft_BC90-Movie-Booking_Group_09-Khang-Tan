@@ -35,29 +35,36 @@ export default function TicketBooking() {
 
     return (
         <div className="max-w-6xl mx-auto p-6 text-white">
-            {/* ======================= THÔNG TIN PHIM ======================= */}
-            <div className="mb-6 bg-gray-800 p-5 rounded-xl shadow-lg">
-                <h2 className="text-2xl font-bold">{seats.thongTinPhim.tenPhim}</h2>
+           {/* ======================= THÔNG TIN PHIM ======================= */}
+            <div className="mb-6 bg-gray-800 p-5 rounded-xl shadow-lg flow-root">
+                {/* HÌNH ẢNH PHIM BÊN PHẢI */}
+                <img src={seats.thongTinPhim.hinhAnh} alt={seats.thongTinPhim.tenPhim}
+                    className="w-80 h-auto rounded-md float-right ml-4 mb-4"
+                />
 
-                <p className="text-gray-300 mt-1">
-                    <span className="font-semibold">Rạp:</span> {seats.thongTinPhim.tenCumRap}
-                </p>
+                {/* THÔNG TIN PHIM BÊN TRÁI */}
+                <div>
+                    <h2 className="text-2xl font-bold">{seats.thongTinPhim.tenPhim}</h2>
+                    <p className="text-gray-300 text-lg mt-4">
+                        <span className=" text-yellow-400 font-semibold">Rạp:</span> {seats.thongTinPhim.tenCumRap}
+                    </p>
 
-                <p className="text-gray-300">
-                    <span className="font-semibold">Địa chỉ:</span> {seats.thongTinPhim.diaChi}
-                </p>
+                    <p className="text-gray-300 text-lg mt-4">
+                        <span className=" text-yellow-400 font-semibold">Địa chỉ:</span> {seats.thongTinPhim.diaChi}
+                    </p>
 
-                <p className="text-gray-300">
-                    <span className="font-semibold">Ngày chiếu:</span> {seats.thongTinPhim.ngayChieu}
-                </p>
+                    <p className="text-gray-300 text-lg mt-4">
+                        <span className=" text-yellow-400 font-semibold">Ngày chiếu:</span> {seats.thongTinPhim.ngayChieu}
+                    </p>
 
-                <p className="text-gray-300">
-                    <span className="font-semibold">Giờ chiếu:</span> {seats.thongTinPhim.gioChieu}
-                </p>
+                    <p className="text-gray-300 text-lg mt-4">
+                        <span className=" text-yellow-400 font-semibold">Giờ chiếu:</span> {seats.thongTinPhim.gioChieu}
+                    </p>
 
-                <p className="text-yellow-400 font-semibold mt-3">
-                    Mã lịch chiếu: {maLichChieu}
-                </p>
+                    <p className="text-yellow-400 font-semibold mt-4">
+                        Mã lịch chiếu: {maLichChieu}
+                    </p>
+                </div>
             </div>
 
             {/* ======================= KHU VỰC GHẾ ======================= */}

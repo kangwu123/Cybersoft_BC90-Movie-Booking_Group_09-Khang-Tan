@@ -37,7 +37,7 @@ const Movie = ({ propMovie }) => {
                         className="block w-full py-2 rounded-2xl font-semibold text-white bg-red-500 
              hover:bg-red-600 shadow-md hover:shadow-lg transition-all duration-300 text-center"
                     >
-                        Movie Detail
+                        Get Tickets
                     </NavLink>
                 </div>
             </div>
