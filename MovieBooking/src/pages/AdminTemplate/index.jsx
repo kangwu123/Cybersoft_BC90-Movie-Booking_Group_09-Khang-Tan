@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Outlet, NavLink, useLocation } from "react-router-dom";
 import AdminHeader from "./_components/Header";
 import Switch from "./_components/Switch";
+import AdminFooter from "./_components/Footer";
 
 const AdminTemplate = () => {
   const location = useLocation()
@@ -144,10 +145,11 @@ const [theme, setTheme] = useState('dark');
               <span className="crumb">Home</span>
             )}
           </div>
-          <div className="p-6 content-wrapper">
+          <div className="p-4 content-wrapper flex-1 sm:p-6 md:p-6 lg:p-8 xl:p-12">
             <Outlet />
           </div>
         </main>
+        <AdminFooter />
       </div>
     </div>
   );

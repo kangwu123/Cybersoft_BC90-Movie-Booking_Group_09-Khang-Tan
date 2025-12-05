@@ -1,64 +1,74 @@
 import { Route } from "react-router-dom";
-// Home Template
-import HomeTemplate from "../pages/HomeTemplate";
-import Home from "../pages/HomeTemplate/Home";
-import MovieList from "../pages/HomeTemplate/MovieList";
-import MovieDetail from "../pages/HomeTemplate/MovieDetail";
-import TicketBooking from "../pages/HomeTemplate/TicketBooking";
-// Admin Template
-import AdminTemplate from "../pages/AdminTemplate";
-import Dashboard from "../pages/AdminTemplate/Dashboard";
-import Users from "../pages/AdminTemplate/Users";
-import Movies from "../pages/AdminTemplate/Movies";
-
-import PageNotFound from "../pages/PageNotFound";
+import React, { lazy } from "react";
 
 const routes = [
   {
     path: "/",
-    element: <HomeTemplate />,
+    element: React.createElement(lazy(() => import("../pages/HomeTemplate"))),
     nested: [
       {
         path: "",
-        element: <Home />,
+        element: React.createElement(lazy(() => import("../pages/HomeTemplate/Home"))),
       },
       {
         path: "movie-list",
-        element: <MovieList />,
+        element: React.createElement(lazy(() => import("../pages/HomeTemplate/MovieList"))),
       },
       {
         path: "movie-detail/:maPhim",
-        element: <MovieDetail />
+        element: React.createElement(lazy(() => import("../pages/HomeTemplate/MovieDetail"))),
       },
       {
         path: "buy-ticket",
-        element: <TicketBooking />
+        element: React.createElement(lazy(() => import("../pages/HomeTemplate/TicketBooking"))),
       },
     ],
   },
 
   {
     path: "/admin",
-    element: <AdminTemplate />,
+    element: React.createElement(lazy(() => import("../pages/AdminTemplate"))),
     nested: [
       {
         path: "",
-        element: <Dashboard />
+        element: React.createElement(lazy(() => import("../pages/AdminTemplate/Dashboard"))),
       },
       {
         path: "users",
-        element: <Users />
+        element: React.createElement(lazy(() => import("../pages/AdminTemplate/Users"))),
       },
       {
         path: "movies",
-        element: <Movies />
+        element: React.createElement(lazy(() => import("../pages/AdminTemplate/Movies"))),
+      },
+      {
+        path: "settings",
+        element: React.createElement(lazy(() => import("../pages/AdminTemplate/Settings"))),
+        nested: [
+          {
+            path: "system",
+            element: React.createElement(lazy(() => import("../pages/AdminTemplate/Settings/System"))),
+          },
+          {
+            path: "notifications",
+            element: React.createElement(lazy(() => import("../pages/AdminTemplate/Settings/Notification"))),
+          },
+          {
+            path: "logo",
+            element: React.createElement(lazy(() => import("../pages/AdminTemplate/Settings/Logo"))),
+          },
+          {
+            path: "location",
+            element: React.createElement(lazy(() => import("../pages/AdminTemplate/Settings/Location"))),
+          },
+        ],
       },
     ],
   },
 
   {
     path: "*",
-    element: <PageNotFound />
+    element: React.createElement(lazy(() => import("../pages/PageNotFound"))),
   },
 ];
 

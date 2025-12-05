@@ -334,7 +334,7 @@ body{
   justify-content:center;
   background:transparent;
   border: none;
-  color: #fff;
+  color: #FFBD31;
   cursor: pointer;
   padding: 8px;
 }
@@ -346,7 +346,7 @@ body{
 }
 
 .dark .toggle-btn{
-  color: #fff;
+  color: #728fce;
 }
 
 .toggle-btn.rotated .bar-icon{
@@ -429,16 +429,16 @@ body{
 
 .sun-icon,
 .moon-icon {
-  color: #f7fafc; /* gray-100 */
+  color: #FFD300; /* gray-100 */
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .dark .sun-icon {
-  color: #f7fafc; /* gray-100 */
+  color: #e50000; /* gray-100 */
 }
 
 .dark .moon-icon {
-  color: #f7fafc; /* gray-100 */
+  color: #FFD300; /* gray-100 */
 }
 
 .sun-icon.active {
