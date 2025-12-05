@@ -29,10 +29,10 @@ const Movie = ({ propMovie }) => {
 
             <td className="px-6 py-4 text-center space-x-2">
                 <button className="text-indigo-600 hover:text-indigo-900 px-3 py-1 rounded-md bg-gray-100 hover:bg-indigo-50 transition">
-                    Edit
+                    <i className="fi fi-rr-edit"></i>
                 </button>
                 <button className="text-red-600 hover:text-red-900 px-3 py-1 rounded-md bg-gray-100 hover:bg-red-50 transition">
-                    Delete
+                    <i className="fi fi-rr-trash"></i>
                 </button>
                 <button className="text-green-600 hover:text-green-800 p-1 rounded-full cursor-pointer bg-gray-100 hover:bg-green-50 transition">
                     <i className="fa-regular fa-calendar"></i>

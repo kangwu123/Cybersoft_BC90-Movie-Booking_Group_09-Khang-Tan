@@ -118,7 +118,7 @@ const Movies = () => {
                                         id="tenPhim"
                                         type="text"
                                         placeholder="Enter movie name"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
                                     />
                                 </div>
 
@@ -128,7 +128,7 @@ const Movies = () => {
                                         id="trailer"
                                         type="text"
                                         placeholder="Enter trailer URL"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
                                     />
                                 </div>
 
@@ -138,7 +138,7 @@ const Movies = () => {
                                         id="hinhAnh"
                                         type="text"
                                         placeholder="Enter image URL"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
                                     />
                                 </div>
 
@@ -147,7 +147,7 @@ const Movies = () => {
                                     <input
                                         id="ngayKhoiChieu"
                                         type="date"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
                                     />
                                 </div>
 
@@ -159,7 +159,7 @@ const Movies = () => {
                                         min={0}
                                         max={10}
                                         placeholder="Enter rating"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
                                     />
                                 </div>
 
@@ -167,7 +167,7 @@ const Movies = () => {
                                     <label className="block text-gray-700 mb-2" htmlFor="dangChieu">Currently Showing</label>
                                     <select
                                         id="dangChieu"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
                                     >
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
@@ -178,7 +178,7 @@ const Movies = () => {
                                     <label className="block text-gray-700 mb-2" htmlFor="sapChieu">Upcoming</label>
                                     <select
                                         id="sapChieu"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
                                     >
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
@@ -189,7 +189,7 @@ const Movies = () => {
                                     <label className="block text-gray-700 mb-2" htmlFor="hot">Featured</label>
                                     <select
                                         id="hot"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
                                     >
                                         <option value="true">Yes</option>
                                         <option value="false">No</option>
@@ -203,7 +203,7 @@ const Movies = () => {
                                 <textarea
                                     id="moTa"
                                     placeholder="Enter movie description"
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                    className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
                                     defaultValue={""}
                                 />
                             </div>

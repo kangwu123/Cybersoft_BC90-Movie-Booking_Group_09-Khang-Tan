@@ -98,71 +98,70 @@ const Users = () => {
                             </button>
                         </div>
 
-                        {/* BODY */}
+                       {/* BODY */}
                         <div className="p-6 space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                                 <div>
-                                    <label className="block text-gray-700 mb-2" htmlFor="username">Username</label>
+                                    <label className="block text-gray-200 mb-2" htmlFor="username">Username</label>
                                     <input
                                         id="username"
                                         type="text"
                                         placeholder="Enter username"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-gray-700 mb-2" htmlFor="fullName">Full Name</label>
+                                    <label className="block text-gray-200 mb-2" htmlFor="fullName">Full Name</label>
                                     <input
                                         id="fullName"
                                         type="text"
                                         placeholder="Enter full name"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-gray-700 mb-2" htmlFor="email">Email</label>
+                                    <label className="block text-gray-200 mb-2" htmlFor="email">Email</label>
                                     <input
                                         id="email"
                                         type="email"
                                         placeholder="Enter email"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-gray-700 mb-2" htmlFor="phone">Phone</label>
+                                    <label className="block text-gray-200 mb-2" htmlFor="phone">Phone</label>
                                     <input
                                         id="phone"
                                         type="tel"
                                         placeholder="Enter phone number"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-gray-700 mb-2" htmlFor="password">Password</label>
+                                    <label className="block text-gray-200 mb-2" htmlFor="password">Password</label>
                                     <input
                                         id="password"
                                         type="password"
                                         placeholder="Enter password"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                                     />
                                 </div>
 
                                 <div>
-                                    <label className="block text-gray-700 mb-2" htmlFor="role">Role</label>
+                                    <label className="block text-gray-200 mb-2" htmlFor="role">Role</label>
                                     <select
                                         id="role"
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
+                                        className="w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                                     >
                                         <option value="admin">Admin</option>
                                         <option value="customer">Customer</option>
                                     </select>
                                 </div>
-
                             </div>
                         </div>
 
