@@ -34,7 +34,7 @@ export default function HomeHeader() {
         <NavLink to="/" className="max-md:flex-1">
           <img className="w-36 h-16 object-cover hover:opacity-90 transition"
             src="/img/Logo.png"
-            alt="CinemaProduction Logo"/>
+            alt="CinemaProduction Logo" />
         </NavLink>
 
         {/* Desktop Navbar */}
@@ -49,8 +49,7 @@ export default function HomeHeader() {
                 }}
                 to="/"
                 className={({ isActive }) =>
-                  `group flex flex-col items-center transition-all duration-300 ${
-                    isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+                  `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                   }`
                 }
               >
@@ -59,10 +58,9 @@ export default function HomeHeader() {
                 </div>
                 <span className="text-sm mt-1 group-hover:text-red-400">Home</span>
                 <span className={({ isActive }) =>
-                    `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${
-                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                    }`
-                  }
+                  `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`
+                }
                 ></span>
               </NavLink>
             </li>
@@ -76,8 +74,7 @@ export default function HomeHeader() {
                 }}
                 to="/movie-list"
                 className={({ isActive }) =>
-                  `group flex flex-col items-center transition-all duration-300 ${
-                    isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+                  `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                   }`
                 }
               >
@@ -87,8 +84,7 @@ export default function HomeHeader() {
                 <span className="text-sm mt-1 group-hover:text-red-400">Movies</span>
                 <span
                   className={({ isActive }) =>
-                    `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${
-                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
                     }`
                   }
                 ></span>
@@ -102,10 +98,9 @@ export default function HomeHeader() {
                   scrollTo(0, 0);
                   setIsOpen(false);
                 }}
-                to="*"
+                to="/cinemas"
                 className={({ isActive }) =>
-                  `group flex flex-col items-center transition-all duration-300 ${
-                    isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+                  `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                   }`
                 }
               >
@@ -115,8 +110,7 @@ export default function HomeHeader() {
                 <span className="text-sm mt-1 group-hover:text-red-400">Cinemas</span>
                 <span
                   className={({ isActive }) =>
-                    `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${
-                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
                     }`
                   }
                 ></span>
@@ -132,8 +126,7 @@ export default function HomeHeader() {
                 }}
                 to="/buy-ticket"
                 className={({ isActive }) =>
-                  `group flex flex-col items-center transition-all duration-300 ${
-                    isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+                  `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                   }`
                 }
               >
@@ -143,8 +136,7 @@ export default function HomeHeader() {
                 <span className="text-sm mt-1 group-hover:text-red-400">Buy Tickets</span>
                 <span
                   className={({ isActive }) =>
-                    `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${
-                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
                     }`
                   }
                 ></span>
@@ -160,8 +152,7 @@ export default function HomeHeader() {
                 }}
                 to="*"
                 className={({ isActive }) =>
-                  `group flex flex-col items-center transition-all duration-300 ${
-                    isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+                  `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                   }`
                 }
               >
@@ -171,8 +162,7 @@ export default function HomeHeader() {
                 <span className="text-sm mt-1 group-hover:text-red-400">Promotions</span>
                 <span
                   className={({ isActive }) =>
-                    `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${
-                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
                     }`
                   }
                 ></span>
@@ -188,8 +178,7 @@ export default function HomeHeader() {
                 }}
                 to="*"
                 className={({ isActive }) =>
-                  `group flex flex-col items-center transition-all duration-300 ${
-                    isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+                  `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                   }`
                 }
               >
@@ -199,8 +188,7 @@ export default function HomeHeader() {
                 <span className="text-sm mt-1 group-hover:text-red-400">Contact</span>
                 <span
                   className={({ isActive }) =>
-                    `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${
-                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
                     }`
                   }
                 ></span>
@@ -223,7 +211,7 @@ export default function HomeHeader() {
                   animate={{ rotate: 0, opacity: 1 }}
                   exit={{ rotate: -180, opacity: 0 }}
                   transition={{ duration: 0.25 }}
-               >
+                >
                   <SearchIcon className="w-6 h-6 cursor-pointer" />
                 </motion.button>
               ) : (
@@ -234,7 +222,7 @@ export default function HomeHeader() {
                   exit={{ width: 0, opacity: 0 }}
                   transition={{ duration: 0.3, ease: 'easeInOut' }}
                   className="flex items-center overflow-hidden rounded-full border border-white/20 bg-white/10 backdrop-blur px-3 py-1"
-               >
+                >
                   <SearchIcon className="w-6 h-6 mr-2 text-gray-300" />
                   <input
                     ref={inputRef}
@@ -304,8 +292,7 @@ export default function HomeHeader() {
                   }}
                   to="/"
                   className={({ isActive }) =>
-                    `group flex flex-col items-center transition-all duration-300 ${
-                      isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+                    `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                     }`
                   }
                 >
@@ -315,8 +302,7 @@ export default function HomeHeader() {
                   <span className="text-sm mt-1 group-hover:text-red-400">Home</span>
                   <span
                     className={({ isActive }) =>
-                      `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${
-                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                      `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
                       }`
                     }
                   ></span>
@@ -332,8 +318,7 @@ export default function HomeHeader() {
                   }}
                   to="/movie-list"
                   className={({ isActive }) =>
-                    `group flex flex-col items-center transition-all duration-300 ${
-                      isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+                    `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                     }`
                   }
                 >
@@ -343,8 +328,7 @@ export default function HomeHeader() {
                   <span className="text-sm mt-1 group-hover:text-red-400">Movies</span>
                   <span
                     className={({ isActive }) =>
-                      `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${
-                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                      `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
                       }`
                     }
                   ></span>
@@ -358,10 +342,9 @@ export default function HomeHeader() {
                     scrollTo(0, 0);
                     setIsOpen(false);
                   }}
-                  to="*"
+                  to="/cinemas"
                   className={({ isActive }) =>
-                    `group flex flex-col items-center transition-all duration-300 ${
-                      isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+                    `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                     }`
                   }
                 >
@@ -371,8 +354,7 @@ export default function HomeHeader() {
                   <span className="text-sm mt-1 group-hover:text-red-400">Cinemas</span>
                   <span
                     className={({ isActive }) =>
-                      `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${
-                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                      `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
                       }`
                     }
                   ></span>
@@ -388,8 +370,7 @@ export default function HomeHeader() {
                   }}
                   to="/buy-ticket"
                   className={({ isActive }) =>
-                    `group flex flex-col items-center transition-all duration-300 ${
-                      isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+                    `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                     }`
                   }
                 >
@@ -399,8 +380,7 @@ export default function HomeHeader() {
                   <span className="text-sm mt-1 group-hover:text-red-400">Buy Tickets</span>
                   <span
                     className={({ isActive }) =>
-                      `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${
-                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                      `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
                       }`
                     }
                   ></span>
@@ -416,8 +396,7 @@ export default function HomeHeader() {
                   }}
                   to="*"
                   className={({ isActive }) =>
-                    `group flex flex-col items-center transition-all duration-300 ${
-                      isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+                    `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                     }`
                   }
                 >
@@ -427,15 +406,14 @@ export default function HomeHeader() {
                   <span className="text-sm mt-1 group-hover:text-red-400">Promotions</span>
                   <span
                     className={({ isActive }) =>
-                      `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${
-                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                      `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
                       }`
                     }
                   ></span>
                 </NavLink>
               </li>
 
-                {/* CONTACT  */}
+              {/* CONTACT  */}
               <li>
                 <NavLink
                   onClick={() => {
@@ -444,8 +422,7 @@ export default function HomeHeader() {
                   }}
                   to="*"
                   className={({ isActive }) =>
-                    `group flex flex-col items-center transition-all duration-300 ${
-                      isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+                    `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                     }`
                   }
                 >
@@ -455,8 +432,7 @@ export default function HomeHeader() {
                   <span className="text-sm mt-1 group-hover:text-red-400">Contact</span>
                   <span
                     className={({ isActive }) =>
-                      `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${
-                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                      `mt-1 h-0.5 bg-red-400 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
                       }`
                     }
                   ></span>
