@@ -74,6 +74,10 @@ const routes = [
     path: "*",
     element: React.createElement(lazy(() => import("../pages/PageNotFound"))),
   },
+   {
+    path: "auth",
+    element: React.createElement(lazy(() => import("../pages/AdminTemplate/Auth"))),
+  },
 ];
 
 const renderRoute = (route) => {
