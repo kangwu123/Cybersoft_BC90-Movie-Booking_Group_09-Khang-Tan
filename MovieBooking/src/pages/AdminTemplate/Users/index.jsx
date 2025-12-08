@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchUserData } from './slice'
+import { fetchUserData, deleteUser } from './slice'
 import User from './user'
+import UserForm from './UserForm'
 
 const Users = () => {
     const [showUserModal, setShowUserModal] = useState(false);
+    const [editingUser, setEditingUser] = useState(null);
 
     const dispatch = useDispatch()
 
@@ -46,14 +48,14 @@ const Users = () => {
 
     const renderUsers = () => {
         return dataUsers?.map((user) => {
-            return <User key={user.taiKhoan} propUser={user} />
+            return <User key={user.taiKhoan} propUser={user} onEdit={(u) => { setEditingUser(u); setShowUserModal(true) }} onDelete={async (taiKhoan) => { if (confirm('Delete user?')) { await dispatch(deleteUser(taiKhoan)).unwrap(); dispatch(fetchUserData()) } }} />
         })
     }
 
     return (
         <div className="pt-0.5">
             {/* Title */}
-           <h1 className="text-3xl font-bold text-black dark:text-amber-600 mb-6">User Management</h1>
+            <h1 className="text-3xl font-bold text-black dark:text-amber-600 mb-6">User Management</h1>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div className="flex w-full md:w-1/2 gap-2">
                     <input
@@ -74,110 +76,19 @@ const Users = () => {
     hover:from-green-500 hover:to-teal-600 text-white font-semibold 
     py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 
     focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 cursor-pointer"
-                    onClick={() => setShowUserModal(true)}
+                    onClick={() => { setEditingUser(null); setShowUserModal(true); }}
                 >
                     Add User
                 </button>
             </div>
-
             {showUserModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
                     <div className="bg-indigo-400 rounded-2xl shadow-xl w-full max-w-3xl relative">
-
-                        {/* HEADER */}
-                        <div className="flex justify-between items-center p-6 border-b border-gray-200">
-                            <h3 className="text-2xl font-bold text-gray-800 tracking-wide">
-                                Add New User
-                            </h3>
-                            <button
-                                className="text-gray-500 hover:text-red-500 transition-colors duration-300 cursor-pointer"
-                                type="button"
-                                onClick={() => setShowUserModal(false)}
-                            >
-                                <i className="fa-solid fa-x text-lg" />
-                            </button>
+                        <div className="flex justify-between items-center p-4 border-b">
+                            <h3 className="text-xl font-semibold">{editingUser ? 'Edit User' : 'Add New User'}</h3>
+                            <button onClick={() => { setShowUserModal(false); setEditingUser(null) }} className="p-2 text-gray-600 hover:text-red-500"><i className="fa-solid fa-x" /></button>
                         </div>
-
-                       {/* BODY */}
-                        <div className="p-6 space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                                <div>
-                                    <label className="block text-gray-200 mb-2" htmlFor="username">Username</label>
-                                    <input
-                                        id="username"
-                                        type="text"
-                                        placeholder="Enter username"
-                                        className="w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-200 mb-2" htmlFor="fullName">Full Name</label>
-                                    <input
-                                        id="fullName"
-                                        type="text"
-                                        placeholder="Enter full name"
-                                        className="w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-200 mb-2" htmlFor="email">Email</label>
-                                    <input
-                                        id="email"
-                                        type="email"
-                                        placeholder="Enter email"
-                                        className="w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-200 mb-2" htmlFor="phone">Phone</label>
-                                    <input
-                                        id="phone"
-                                        type="tel"
-                                        placeholder="Enter phone number"
-                                        className="w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-200 mb-2" htmlFor="password">Password</label>
-                                    <input
-                                        id="password"
-                                        type="password"
-                                        placeholder="Enter password"
-                                        className="w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-200 mb-2" htmlFor="role">Role</label>
-                                    <select
-                                        id="role"
-                                        className="w-full px-4 py-2 bg-white text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                    >
-                                        <option value="admin">Admin</option>
-                                        <option value="customer">Customer</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* FOOTER */}
-                        <div className="flex justify-end gap-3 p-6 border-t border-gray-200">
-                            <button
-                                className="px-5 py-2 rounded-lg bg-[#C6C6C6] hover:bg-[#AAAAAA] transition cursor-pointer"
-                                onClick={() => setShowUserModal(false)}
-                            >
-                                Close
-                            </button>
-                            <button className="px-5 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition cursor-pointer">
-                                Add User
-                            </button>
-                        </div>
-
+                        <UserForm initialValues={editingUser} onClose={() => { setShowUserModal(false); setEditingUser(null) }} onSaved={() => { setShowUserModal(false); setEditingUser(null); dispatch(fetchUserData()) }} />
                     </div>
                 </div>
             )}

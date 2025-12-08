@@ -22,6 +22,42 @@ export const fetchUserData = createAsyncThunk(
   }
 );
 
+export const addUser = createAsyncThunk(
+  'users/addUser',
+  async (userInfo, { rejectWithValue }) => {
+    try {
+      const result = await api.post('QuanLyNguoiDung/ThemNguoiDung', userInfo);
+      return result.data.content;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  'users/updateUser',
+  async (userInfo, { rejectWithValue }) => {
+    try {
+      const result = await api.post('QuanLyNguoiDung/CapNhatThongTinNguoiDung', userInfo);
+      return result.data.content;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  'users/deleteUser',
+  async (taiKhoan, { rejectWithValue }) => {
+    try {
+      const result = await api.delete(`QuanLyNguoiDung/XoaNguoiDung?TaiKhoan=${taiKhoan}`);
+      return { taiKhoan, content: result.data.content };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const userManageSlice = createSlice({
   name: "userManageSlice",
   initialState,
@@ -40,6 +76,18 @@ const userManageSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(addUser.pending, (state) => { state.loading = true; });
+    builder.addCase(addUser.fulfilled, (state) => { state.loading = false; });
+    builder.addCase(addUser.rejected, (state, action) => { state.loading = false; state.error = action.payload; });
+
+    builder.addCase(updateUser.pending, (state) => { state.loading = true; });
+    builder.addCase(updateUser.fulfilled, (state) => { state.loading = false; });
+    builder.addCase(updateUser.rejected, (state, action) => { state.loading = false; state.error = action.payload; });
+
+    builder.addCase(deleteUser.pending, (state) => { state.loading = true; });
+    builder.addCase(deleteUser.fulfilled, (state, action) => { state.loading = false; if (state.dataUsers) state.dataUsers = state.dataUsers.filter(u => u.taiKhoan !== action.payload.taiKhoan); });
+    builder.addCase(deleteUser.rejected, (state, action) => { state.loading = false; state.error = action.payload; });
   },
 });
 

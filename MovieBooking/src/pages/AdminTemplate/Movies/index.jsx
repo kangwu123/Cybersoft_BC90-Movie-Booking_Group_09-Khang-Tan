@@ -2,11 +2,15 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchMovieList } from '../../HomeTemplate/MovieList/slice'
 import Movie from './movie'
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import MovieForm from './MovieForm'
+import ScheduleForm from './ScheduleForm'
+import { fetchAdminMovieList, deleteMovie, fetchMovieDetail } from './slice'
 
 const Movies = () => {
     const [showModal, setShowModal] = useState(false);
+    const [editingMovie, setEditingMovie] = useState(null);
+    const [showScheduleModal, setShowScheduleModal] = useState(false);
+    const [scheduleMovie, setScheduleMovie] = useState(null);
 
     const dispatch = useDispatch()
 
@@ -16,7 +20,18 @@ const Movies = () => {
 
     useEffect(() => {
         dispatch(fetchMovieList())
+        dispatch(fetchAdminMovieList())
     }, [])
+
+    const handleEdit = async (maPhim) => {
+        try {
+            const res = await dispatch(fetchMovieDetail(maPhim)).unwrap()
+            setEditingMovie(res)
+            setShowModal(true)
+        } catch (err) {
+            console.error('Failed to fetch movie detail', err)
+        }
+    }
 
     if (loading) {
         return (
@@ -49,7 +64,11 @@ const Movies = () => {
     const renderNowMovieList = () => {
         return data?.map((movie) => {
             if (movie.dangChieu) {
-                return <Movie key={movie.maPhim} propMovie={movie} />
+                return <Movie key={movie.maPhim} propMovie={movie}
+                    onSchedule={(m) => { setShowModal(false); setScheduleMovie(m); setShowScheduleModal(true); }}
+                    onEdit={(m) => { handleEdit(m.maPhim); }}
+                    onDelete={(id) => { if (window.confirm('Delete this movie?')) { dispatch(deleteMovie(id)); } }}
+                />
             }
         })
     }
@@ -57,14 +76,18 @@ const Movies = () => {
     const renderUpComingMovieList = () => {
         return data?.map((movie) => {
             if (!movie.dangChieu) {
-                return <Movie key={movie.maPhim} propMovie={movie} />
+                return <Movie key={movie.maPhim} propMovie={movie}
+                    onSchedule={(m) => { setShowModal(false); setScheduleMovie(m); setShowScheduleModal(true); }}
+                    onEdit={(m) => { handleEdit(m.maPhim); }}
+                    onDelete={(id) => { if (window.confirm('Delete this movie?')) { dispatch(deleteMovie(id)); } }}
+                />
             }
         })
     }
 
     return (
         <div className="pt-0.5">
-        <h1 className="text-3xl font-bold text-black dark:text-amber-600 mb-6">Movies Management</h1>
+            <h1 className="text-3xl font-bold text-black dark:text-amber-600 mb-6">Movies Management</h1>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div className="flex flex-col md:flex-row md:items-center gap-4 w-full md:w-2/3">
                     <input
@@ -86,143 +109,31 @@ const Movies = () => {
     hover:from-pink-600 hover:to-purple-600 text-white font-semibold 
     py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 
     focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 cursor-pointer"
-                    onClick={() => setShowModal(true)}>
+                    onClick={() => { setEditingMovie(null); setShowModal(true); }}>
                     Add Movie
                 </button>
             </div>
 
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-                    <div className="bg-indigo-400 rounded-2xl shadow-xl w-full max-w-4xl relative">
-
-                        {/* HEADER */}
-                        <div className="flex justify-between items-center p-6 border-b border-gray-200">
-                            <h3 className="text-2xl font-bold text-gray-800 tracking-wide">
-                                Add New Movie
-                            </h3>
-                            <button
-                                className="text-gray-500 hover:text-red-500 transition-colors duration-300 cursor-pointer"
-                                type="button"
-                                onClick={() => setShowModal(false)}
-                            >
-                                <i className="fa-solid fa-x text-lg" />
-                            </button>
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl relative">
+                        <div className="flex justify-between items-center p-4 border-b">
+                            <h3 className="text-xl font-semibold text-gray-800">{editingMovie ? 'Edit Movie' : 'Add New Movie'}</h3>
+                            <button onClick={() => setShowModal(false)} className="p-2 text-gray-600 hover:text-red-500"><i className="fa-solid fa-x" /></button>
                         </div>
+                        <MovieForm initialValues={editingMovie} onClose={() => setShowModal(false)} onSaved={() => { setShowModal(false); dispatch(fetchMovieList()); dispatch(fetchAdminMovieList()); }} />
+                    </div>
+                </div>
+            )}
 
-                        {/* BODY */}
-                        <div className="p-6 space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-                                <div className="md:col-span-2">
-                                    <label className="block text-gray-700 mb-2" htmlFor="tenPhim">Movie Name</label>
-                                    <input
-                                        id="tenPhim"
-                                        type="text"
-                                        placeholder="Enter movie name"
-                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
-                                    />
-                                </div>
-
-                                <div className="md:col-span-2">
-                                    <label className="block text-gray-700 mb-2" htmlFor="trailer">Trailer URL</label>
-                                    <input
-                                        id="trailer"
-                                        type="text"
-                                        placeholder="Enter trailer URL"
-                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
-                                    />
-                                </div>
-
-                                <div className="md:col-span-2">
-                                    <label className="block text-gray-700 mb-2" htmlFor="hinhAnh">Image URL</label>
-                                    <input
-                                        id="hinhAnh"
-                                        type="text"
-                                        placeholder="Enter image URL"
-                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
-                                    />
-                                </div>
-
-                                <div className="md:col-span-2">
-                                    <label className="block text-gray-700 mb-2" htmlFor="ngayKhoiChieu">Release Date</label>
-                                    <input
-                                        id="ngayKhoiChieu"
-                                        type="date"
-                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-700 mb-2" htmlFor="danhGia">Rating</label>
-                                    <input
-                                        id="danhGia"
-                                        type="number"
-                                        min={0}
-                                        max={10}
-                                        placeholder="Enter rating"
-                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-700 mb-2" htmlFor="dangChieu">Currently Showing</label>
-                                    <select
-                                        id="dangChieu"
-                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
-                                    >
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-700 mb-2" htmlFor="sapChieu">Upcoming</label>
-                                    <select
-                                        id="sapChieu"
-                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
-                                    >
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-700 mb-2" htmlFor="hot">Featured</label>
-                                    <select
-                                        id="hot"
-                                        className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
-                                    >
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                    </select>
-                                </div>
-
-                            </div>
-
-                            <div>
-                                <label className="block text-gray-700 mb-2" htmlFor="moTa">Description</label>
-                                <textarea
-                                    id="moTa"
-                                    placeholder="Enter movie description"
-                                    className="w-full px-4 py-2 border bg-white text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-pointer"
-                                    defaultValue={""}
-                                />
-                            </div>
+            {showScheduleModal && scheduleMovie && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl relative">
+                        <div className="flex justify-between items-center p-4 border-b">
+                            <h3 className="text-lg font-semibold text-gray-800">Create Schedule for: {scheduleMovie.tenPhim}</h3>
+                            <button onClick={() => { setShowScheduleModal(false); setScheduleMovie(null) }} className="p-2 text-gray-600 hover:text-red-500"><i className="fa-solid fa-x" /></button>
                         </div>
-
-                        {/* FOOTER */}
-                        <div className="flex justify-end gap-3 p-6 border-t border-gray-200">
-                            <button
-                                className="px-5 py-2 rounded-lg bg-[#C6C6C6] hover:bg-[#AAAAAA] transition cursor-pointer"
-                                onClick={() => setShowModal(false)}
-                            >
-                                Close
-                            </button>
-                            <button className="px-5 py-2 rounded-lg bg-red-500 text-white hover:bg-rose-600 transition-all duration-300 cursor-pointer">
-                                Add Movie
-                            </button>
-                        </div>
-
+                        <ScheduleForm movie={scheduleMovie} onClose={() => { setShowScheduleModal(false); setScheduleMovie(null) }} onSaved={() => { setShowScheduleModal(false); setScheduleMovie(null); }} />
                     </div>
                 </div>
             )}

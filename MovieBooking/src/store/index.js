@@ -7,6 +7,9 @@ import cinemaReducer from "./../pages/HomeTemplate/Cinemas/slice"
 // Authentication Login & Register
 import authLoginReducer from "./../pages/AdminTemplate/Auth/slice";
 import userManageReducer from "./../pages/AdminTemplate/Users/slice";
+import adminMovieReducer from "./../pages/AdminTemplate/Movies/slice";
+import settingsReducer from "./../pages/AdminTemplate/Settings/slice";
+import timeShowReducer from "./../pages/AdminTemplate/TimeShow/slice";
 
 const Store = configureStore({
   reducer: {
@@ -15,6 +18,9 @@ const Store = configureStore({
     movieDetailReducer,
     ticketBooking: ticketBookingReducer,
     userManageReducer,
+    adminMovie: adminMovieReducer,
+    settings: settingsReducer,
+    timeshow: timeShowReducer,
     cinema: cinemaReducer,
     authLoginReducer,
   },
