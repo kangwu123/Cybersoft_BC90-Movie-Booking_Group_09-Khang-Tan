@@ -1,5 +1,7 @@
 import { Route } from "react-router-dom";
 import React, { lazy } from "react";
+import PrivateRoute from "./PrivateRoute";
+
 
 const routes = [
   {
@@ -24,7 +26,18 @@ const routes = [
       },
       {
         path: "buy-ticket",
-        element: React.createElement(lazy(() => import("../pages/HomeTemplate/TicketBooking"))),
+        element: React.createElement(
+          PrivateRoute,
+          {
+            element: React.createElement(
+              lazy(() => import("../pages/HomeTemplate/TicketBooking"))
+            )
+          }
+        ),
+      },
+      {
+        path: "login",
+        element: React.createElement(lazy(() => import("../pages/HomeTemplate/Auth/Login"))),
       },
     ],
   },
@@ -74,7 +87,7 @@ const routes = [
     path: "*",
     element: React.createElement(lazy(() => import("../pages/PageNotFound"))),
   },
-   {
+  {
     path: "auth",
     element: React.createElement(lazy(() => import("../pages/AdminTemplate/Auth"))),
   },

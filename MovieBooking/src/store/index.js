@@ -4,6 +4,7 @@ import movieListReducer from "./../pages/HomeTemplate/MovieList/slice";
 import movieDetailReducer from "./../pages/HomeTemplate/MovieDetail/slice";
 import ticketBookingReducer from "./../pages/HomeTemplate/TicketBooking/slice";
 import cinemaReducer from "./../pages/HomeTemplate/Cinemas/slice"
+import userReducer from "./userSlice";
 // Authentication Login & Register
 import authLoginReducer from "./../pages/AdminTemplate/Auth/slice";
 import userManageReducer from "./../pages/AdminTemplate/Users/slice";
@@ -13,6 +14,7 @@ import timeShowReducer from "./../pages/AdminTemplate/TimeShow/slice";
 
 const Store = configureStore({
   reducer: {
+    user: userReducer,
     movieHomeReducer,
     movieListReducer,
     movieDetailReducer,
