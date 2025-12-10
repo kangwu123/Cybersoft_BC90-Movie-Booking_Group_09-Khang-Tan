@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { setUserLogin } from "../../../store/userSlice";
 import { userApi } from "../../../services/api";
 import { useNavigate } from "react-router-dom";
+import { Lock, User } from "lucide-react";
 
 export default function Login() {
     const dispatch = useDispatch();
@@ -31,7 +32,6 @@ export default function Login() {
         try {
             const res = await userApi.login(form);
 
-            // Lưu user vào Redux
             dispatch(
                 setUserLogin({
                     user: res.data.content,
@@ -39,7 +39,6 @@ export default function Login() {
                 })
             );
 
-            // Lưu vào localStorage cho interceptor axios
             localStorage.setItem("USER_ADMIN", JSON.stringify(res.data.content));
 
             navigate("/");
@@ -51,54 +50,75 @@ export default function Login() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-            <div className="w-full max-w-sm bg-white rounded-xl shadow-lg p-6">
-                <h2 className="text-2xl font-semibold text-center mb-6">Đăng nhập</h2>
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 p-4">
+
+            <div className="w-full max-w-md bg-white/20 backdrop-blur-xl border border-white/30 rounded-2xl shadow-2xl p-8">
+
+                <h2 className="text-3xl font-bold text-center text-white mb-6 drop-shadow-lg">
+                    🎬 Đăng nhập hệ thống
+                </h2>
 
                 {errorMsg && (
-                    <p className="text-red-500 text-center mb-3">{errorMsg}</p>
+                    <p className="text-red-300 text-center mb-4 font-medium">
+                        {errorMsg}
+                    </p>
                 )}
 
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block mb-1 text-gray-600">Tài khoản</label>
-                        <input
-                            name="taiKhoan"
-                            type="text"
-                            onChange={handleChange}
-                            required
-                            className="w-full px-3 py-2 border rounded-lg text-black focus:ring-2 focus:ring-blue-500"
-                            placeholder="Nhập tài khoản..."
-                        />
+                <form onSubmit={handleSubmit} className="space-y-5">
+
+                    {/* USERNAME */}
+                    <div>
+                        <label className="block mb-1 text-white font-medium">
+                            Tài khoản
+                        </label>
+                        <div className="relative">
+                            <User className="absolute left-3 top-2.5 text-white/70" size={18} />
+                            <input
+                                name="taiKhoan"
+                                type="text"
+                                onChange={handleChange}
+                                required
+                                className="w-full pl-10 pr-3 py-2 rounded-lg bg-white/30 border border-white/40 text-white placeholder-white/50 focus:ring-2 focus:ring-blue-300 outline-none"
+                                placeholder="Nhập tài khoản..."
+                            />
+                        </div>
                     </div>
 
-                    <div className="mb-4">
-                        <label className="block mb-1 text-gray-600">Mật khẩu</label>
-                        <input
-                            name="matKhau"
-                            type="password"
-                            onChange={handleChange}
-                            required
-                            className="w-full px-3 py-2 border rounded-lg text-black focus:ring-2 focus:ring-blue-500"
-                            placeholder="Nhập mật khẩu..."
-                        />
+                    {/* PASSWORD */}
+                    <div>
+                        <label className="block mb-1 text-white font-medium">
+                            Mật khẩu
+                        </label>
+                        <div className="relative">
+                            <Lock className="absolute left-3 top-2.5 text-white/70" size={18} />
+                            <input
+                                name="matKhau"
+                                type="password"
+                                onChange={handleChange}
+                                required
+                                className="w-full pl-10 pr-3 py-2 rounded-lg bg-white/30 border border-white/40 text-white placeholder-white/50 focus:ring-2 focus:ring-purple-300 outline-none"
+                                placeholder="Nhập mật khẩu..."
+                            />
+                        </div>
                     </div>
 
+                    {/* BUTTON */}
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-lg font-medium transition-all"
+                        className="w-full py-3 bg-white/90 hover:bg-white text-blue-600 font-semibold rounded-xl shadow-lg transition-all"
                     >
                         {loading ? "Đang đăng nhập..." : "Đăng nhập"}
                     </button>
                 </form>
 
-                <div className="text-center mt-4 text-sm text-gray-500">
+                {/* FOOTER */}
+                <p className="text-center text-white/80 mt-5 text-sm">
                     Chưa có tài khoản?{" "}
-                    <span className="text-blue-600 cursor-pointer hover:underline">
+                    <span className="text-white font-semibold underline cursor-pointer">
                         Liên hệ Admin
                     </span>
-                </div>
+                </p>
             </div>
         </div>
     );

@@ -2,12 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MenuIcon, SearchIcon, XIcon } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../../../store/userSlice";
 
 export default function HomeHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
   const inputRef = useRef(null);
+  const dispatch = useDispatch();
+  const { userLogin } = useSelector(state => state.user);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -253,9 +257,51 @@ export default function HomeHeader() {
             </AnimatePresence>
           </div>
 
-          <button className="px-4 py-1 sm:px-7 sm:py-2 bg-primary hover:bg-primary-dull transition rounded-full font-medium cursor-pointer">
-            Login
-          </button>
+          {/* <NavLink
+            onClick={() => {
+              scrollTo(0, 0);
+              setIsOpen(false);
+            }}
+            to="/login"
+            className={({ isActive }) =>
+              `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
+              }`
+            }
+          >
+            <button className="px-4 py-1 sm:px-7 sm:py-2 bg-primary hover:bg-primary-dull transition rounded-full font-medium cursor-pointer">
+              Login
+            </button>
+          </NavLink> */}
+          {/* LOGIN / LOGOUT */}
+          {!userLogin ? (
+            <NavLink
+              onClick={() => {
+                scrollTo(0, 0);
+                setIsOpen(false);
+              }}
+              to="/login"
+              className={({ isActive }) =>
+                `group flex flex-col items-center transition-all duration-300 ${isActive ? "text-red-400" : "text-gray-300 hover:text-red-400"
+                }`
+              }
+            >
+              <button className="px-4 py-1 sm:px-7 sm:py-2 bg-primary hover:bg-primary-dull transition rounded-full font-medium cursor-pointer">
+                Login
+              </button>
+            </NavLink>
+          ) : (
+            <button
+              onClick={() => {
+                dispatch(logout());
+                scrollTo(0, 0);
+                setIsOpen(false);
+              }}
+              className="px-4 py-1 sm:px-7 sm:py-2 bg-red-500 hover:bg-red-600 transition rounded-full font-medium cursor-pointer text-white"
+            >
+              Logout
+            </button>
+          )}
+
         </div>
 
         {/* Menu Icon for Responsive Mode */}
