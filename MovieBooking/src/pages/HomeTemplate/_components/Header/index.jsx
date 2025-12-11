@@ -257,21 +257,6 @@ export default function HomeHeader() {
             </AnimatePresence>
           </div>
 
-          {/* <NavLink
-            onClick={() => {
-              scrollTo(0, 0);
-              setIsOpen(false);
-            }}
-            to="/login"
-            className={({ isActive }) =>
-              `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
-              }`
-            }
-          >
-            <button className="px-4 py-1 sm:px-7 sm:py-2 bg-primary hover:bg-primary-dull transition rounded-full font-medium cursor-pointer">
-              Login
-            </button>
-          </NavLink> */}
           {/* LOGIN / LOGOUT */}
           {!userLogin ? (
             <NavLink
@@ -290,16 +275,25 @@ export default function HomeHeader() {
               </button>
             </NavLink>
           ) : (
-            <button
-              onClick={() => {
-                dispatch(logout());
-                scrollTo(0, 0);
-                setIsOpen(false);
-              }}
-              className="px-4 py-1 sm:px-7 sm:py-2 bg-red-500 hover:bg-red-600 transition rounded-full font-medium cursor-pointer text-white"
-            >
-              Logout
-            </button>
+            <>
+              <span className="text-white text-lg">Hi, &nbsp;
+                <span className="text-amber-500 font-semibold text-lg hover:scale-105 transition-transform duration-300 mr-4">
+                  {userLogin?.hoTen}
+                </span>
+              </span>
+
+              <button
+                onClick={() => {
+                  dispatch(logout());
+                  scrollTo(0, 0);
+                  setIsOpen(false);
+                }}
+                className="px-4 py-1 sm:px-7 sm:py-2 bg-red-500 hover:bg-red-600 transition rounded-full font-medium cursor-pointer text-white"
+              >
+                Logout
+              </button>
+            </>
+
           )}
 
         </div>
