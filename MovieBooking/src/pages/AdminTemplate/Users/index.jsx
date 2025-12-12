@@ -86,9 +86,9 @@ const Users = () => {
             </div>
             {showUserModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-                    <div className="bg-indigo-400 rounded-2xl shadow-xl w-full max-w-3xl relative">
+                    <div className="bg-blue-300 rounded-2xl shadow-xl w-full max-w-3xl relative">
                         <div className="flex justify-between items-center p-4 border-b">
-                            <h3 className="text-xl font-semibold">{editingUser ? 'Edit User' : 'Add New User'}</h3>
+                            <h3 className="text-xl font-semibold text-red-600">{editingUser ? 'Edit User' : 'Add New User'}</h3>
                             <button onClick={() => { setShowUserModal(false); setEditingUser(null) }} className="p-2 text-gray-600 hover:text-red-500"><i className="fa-solid fa-x" /></button>
                         </div>
                         <UserForm initialValues={editingUser} onClose={() => { setShowUserModal(false); setEditingUser(null) }} onSaved={() => { setShowUserModal(false); setEditingUser(null); dispatch(fetchUserData()) }} />
@@ -96,10 +96,10 @@ const Users = () => {
                 </div>
             )}
 
-            <div className="bg-white p-6 rounded-lg shadow-lg overflow-x-auto mb-6">
+            <div className="bg-blue-300 p-6 rounded-lg shadow-lg overflow-x-auto mb-6">
                 <h2 className="text-2xl font-bold text-black dark:text-amber-600 mb-4">Quản Trị</h2>
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-100">
+                <table className="min-w-full divide-y divide-blue-300">
+                    <thead className="bg-blue-300">
                         <tr>
                             <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</th>
                             <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider max-w-[150px] wrap-break-word">Full Name</th>
@@ -110,16 +110,16 @@ const Users = () => {
                         </tr>
                     </thead>
 
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-blue-300 divide-y divide-blue-300">
                         {renderUsers(quanTriUsers)}
                     </tbody>
                 </table>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-lg overflow-x-auto">
+            <div className="bg-blue-300 p-6 rounded-lg shadow-lg overflow-x-auto">
                 <h2 className="text-2xl font-bold text-black dark:text-amber-600 mb-4">Khách Hàng</h2>
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-100">
+                <table className="min-w-full divide-y divide-blue-300">
+                    <thead className="bg-blue-300">
                         <tr>
                             <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</th>
                             <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider max-w-[150px] wrap-break-word">Full Name</th>
@@ -130,7 +130,7 @@ const Users = () => {
                         </tr>
                     </thead>
 
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-blue-300 divide-y divide-blue-300">
                         {renderUsers(khachHangUsers)}
                     </tbody>
                 </table>

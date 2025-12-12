@@ -116,9 +116,9 @@ const Movies = () => {
 
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl relative">
+                    <div className="bg-blue-300 rounded-2xl shadow-xl w-full max-w-4xl relative">
                         <div className="flex justify-between items-center p-4 border-b">
-                            <h3 className="text-xl font-semibold text-gray-800">{editingMovie ? 'Edit Movie' : 'Add New Movie'}</h3>
+                            <h3 className="text-xl font-semibold text-red-600">{editingMovie ? 'Edit Movie' : 'Add New Movie'}</h3>
                             <button onClick={() => setShowModal(false)} className="p-2 text-gray-600 hover:text-red-500"><i className="fa-solid fa-x" /></button>
                         </div>
                         <MovieForm initialValues={editingMovie} onClose={() => setShowModal(false)} onSaved={() => { setShowModal(false); dispatch(fetchMovieList()); dispatch(fetchAdminMovieList()); }} />
