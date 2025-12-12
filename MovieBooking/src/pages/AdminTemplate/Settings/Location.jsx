@@ -46,8 +46,8 @@ const Location = () => {
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="bg-white rounded-lg w-full max-w-lg p-6">
-            <h3 className="text-lg font-semibold mb-4">{editing ? 'Edit Location' : 'Add Location'}</h3>
+          <div className="bg-blue-300 rounded-lg w-full max-w-lg p-6">
+            <h3 className="text-lg font-semibold mb-4 text-red-600">{editing ? 'Edit Location' : 'Add Location'}</h3>
             <form onSubmit={formik.handleSubmit}>
               <div className="mb-3">
                 <label className="block text-sm text-black">Name</label>

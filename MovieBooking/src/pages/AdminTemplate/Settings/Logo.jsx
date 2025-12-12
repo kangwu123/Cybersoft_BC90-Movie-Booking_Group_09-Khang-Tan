@@ -73,12 +73,12 @@ const Logo = () => {
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="bg-white rounded-lg w-full max-w-xl p-6">
-            <h3 className="text-lg font-semibold mb-4">{editing ? 'Edit Logo' : 'Add Logo'}</h3>
+          <div className="bg-blue-300 rounded-lg w-full max-w-xl p-6">
+            <h3 className="text-lg font-semibold mb-4 text-red-600">{editing ? 'Edit Logo' : 'Add Logo'}</h3>
             <form onSubmit={formik.handleSubmit}>
               <div className="mb-3">
                 <label className="block text-sm text-black">Name</label>
-                <input name="name" value={formik.values.name} onChange={formik.handleChange} className="w-full p-2 border border-gray-300 bg-white text-black rounded" />
+                <input name="name" value={formik.values.name} onChange={formik.handleChange} className="w-full p-2 border border-gray-300  text-black rounded" />
                 {formik.touched.name && formik.errors.name && <div className="text-red-500 text-sm">{formik.errors.name}</div>}
               </div>
               <div className="mb-3">

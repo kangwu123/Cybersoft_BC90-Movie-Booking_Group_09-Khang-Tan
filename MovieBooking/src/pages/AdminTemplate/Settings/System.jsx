@@ -39,11 +39,11 @@ const System = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {roles.map(r => (
-          <div key={r.id} className="border p-4 rounded bg-white">
+          <div key={r.id} className="border p-4 rounded">
             <div className="flex justify-between items-start">
               <div>
                 <div className="font-medium text-lg">{r.name}</div>
-                <div className="text-sm text-gray-600">{r.permissions.map(p => PERMISSIONS.find(pp => pp.key === p)?.label || p).join(', ')}</div>
+                <div className="text-sm text-gray-300">{r.permissions.map(p => PERMISSIONS.find(pp => pp.key === p)?.label || p).join(', ')}</div>
               </div>
               <div className="flex gap-2">
                 <button onClick={() => onEdit(r)} className="px-2 py-1 bg-blue-500 text-white rounded">Edit</button>
@@ -56,8 +56,8 @@ const System = () => {
 
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="bg-white rounded-lg w-full max-w-lg p-6">
-            <h3 className="text-lg font-semibold mb-4">{editing ? 'Edit Role' : 'Add Role'}</h3>
+          <div className="bg-blue-300 rounded-lg w-full max-w-lg p-6">
+            <h3 className="text-lg font-semibold mb-4 text-red-600">{editing ? 'Edit Role' : 'Add Role'}</h3>
             <form onSubmit={formik.handleSubmit}>
               <div className="mb-3">
                 <label className="block text-sm text-black">Role Name</label>
