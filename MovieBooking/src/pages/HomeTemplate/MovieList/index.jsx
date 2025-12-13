@@ -3,9 +3,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { fetchMovieList } from './slice'
 import Movie from './movie'
+import Trailer from './Trailer';
 
 const MovieList = () => {
     const dispatch = useDispatch()
+    const [trailerUrl, setTrailerUrl] = React.useState('');
+
+    const handleOpenTrailer = (url) => {
+        setTrailerUrl(url);
+    };
+
+    const handleCloseTrailer = () => {
+        setTrailerUrl('');
+    };
 
     const state = useSelector((state) => state.movieListReducer)
 
@@ -50,7 +60,7 @@ const MovieList = () => {
     const renderNowMovieList = () => {
         return data?.map((movie) => {
             if (movie.dangChieu) {
-                return <Movie key={movie.maPhim} propMovie={movie} />
+                return <Movie key={movie.maPhim} propMovie={movie} onOpenTrailer={handleOpenTrailer} />
             }
         });
     };
@@ -58,7 +68,7 @@ const MovieList = () => {
     const renderUpComingMovieList = () => {
         return data?.map((movie) => {
             if (!movie.dangChieu) {
-                return <Movie key={movie.maPhim} propMovie={movie} />
+                return <Movie key={movie.maPhim} propMovie={movie} onOpenTrailer={handleOpenTrailer} />
             }
         });
     };
@@ -90,6 +100,7 @@ const MovieList = () => {
                         </div>
                     </div>
                 </section>
+                {trailerUrl && <Trailer propTrailer={trailerUrl} onClose={handleCloseTrailer} />}
             </div>
         </div>
     )
