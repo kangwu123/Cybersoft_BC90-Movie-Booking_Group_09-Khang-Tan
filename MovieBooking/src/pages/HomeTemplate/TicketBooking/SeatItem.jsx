@@ -4,8 +4,16 @@ import { toggleSeat } from "./slice";
 export function SeatItem({ seat }) {
     const dispatch = useDispatch();
     const selectedSeats = useSelector((s) => s.ticketBooking.selectedSeats);
-
+    const isBooked = seat.daDat;
     const isSelected = selectedSeats.includes(seat.maGhe);
+
+    if (isBooked) {
+        seatClass += "bg-gray-400 cursor-not-allowed";
+    } else if (isSelected) {
+        seatClass += "bg-green-500 text-white";
+    } else {
+        seatClass += "bg-white";
+    }
 
     return (
         <button

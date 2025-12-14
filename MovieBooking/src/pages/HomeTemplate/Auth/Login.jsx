@@ -39,7 +39,7 @@ export default function Login() {
                 })
             );
 
-            localStorage.setItem("USER_CUSTOMER", JSON.stringify(res.data.content));
+            localStorage.setItem("USER_LOGIN", JSON.stringify(res.data.content));
 
             navigate("/");
         } catch (error) {
