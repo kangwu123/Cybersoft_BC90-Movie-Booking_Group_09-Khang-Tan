@@ -61,7 +61,7 @@ export default function SeatList({ seats, selectedSeats, onToggleSeat }) {
                 <div className="bg-green-500 text-white px-4 py-1 font-semibold rounded-lg border border-green-800 shadow-md">
                     EXIT
                 </div>
-    
+
                 {/* RIGHT EXIT */}
                 <div className="bg-green-500 text-white px-4 py-1 font-semibold rounded-lg border border-green-800 shadow-md">
                     EXIT

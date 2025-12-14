@@ -19,6 +19,20 @@ export const fetchTicketBooking = createAsyncThunk(
         }
     }
 );
+export const datVe = createAsyncThunk(
+    "ticketBooking/datVe",
+    async ({ maLichChieu, danhSachVe }, { rejectWithValue }) => {
+        try {
+            const res = await api.post("QuanLyDatVe/DatVe", {
+                maLichChieu,
+                danhSachVe,
+            });
+            return res.data.content;
+        } catch (err) {
+            return rejectWithValue(err.response?.data || err.message);
+        }
+    }
+);
 
 const ticketBookingSlice = createSlice({
     name: "ticketBooking",
@@ -39,6 +53,7 @@ const ticketBookingSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            // ===== LẤY DANH SÁCH GHẾ =====
             .addCase(fetchTicketBooking.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -48,6 +63,19 @@ const ticketBookingSlice = createSlice({
                 state.seats = action.payload;
             })
             .addCase(fetchTicketBooking.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            // ===== ĐẶT VÉ =====
+            .addCase(datVe.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(datVe.fulfilled, (state) => {
+                state.loading = false;
+                state.selectedSeats = []; //  reset ghế sau khi đặt
+            })
+            .addCase(datVe.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
