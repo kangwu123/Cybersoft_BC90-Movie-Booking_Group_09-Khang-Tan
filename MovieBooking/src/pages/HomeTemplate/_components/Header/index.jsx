@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MenuIcon, SearchIcon, XIcon } from 'lucide-react';
+import { MenuIcon, SearchIcon, XIcon, ChevronDown } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../../../pages/HomeTemplate/Auth/userSlice";
@@ -12,6 +12,7 @@ export default function HomeHeader() {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
   const { userLogin } = useSelector(state => state.user);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -258,44 +259,69 @@ export default function HomeHeader() {
           </div>
 
           {/* LOGIN / LOGOUT */}
+          <span className="text-white text-lg">Hi, &nbsp;
+            <span className="text-amber-500 font-semibold text-lg hover:scale-105 transition-transform duration-300 mr-4">
+              {userLogin?.hoTen}
+            </span>
+          </span>
           {!userLogin ? (
-            <NavLink
-              onClick={() => {
-                scrollTo(0, 0);
-                setIsOpen(false);
-              }}
-              to="/login"
-              className={({ isActive }) =>
-                `group flex flex-col items-center transition-all duration-300 ${isActive ? "text-red-400" : "text-gray-300 hover:text-red-400"
-                }`
-              }
-            >
-              <button className="px-4 py-1 sm:px-7 sm:py-2 bg-primary hover:bg-primary-dull transition rounded-full font-medium cursor-pointer">
-                Login
-              </button>
+            <NavLink to="/login">
+              <img
+                src='/img/avatarLogo.jpg'
+                alt='Avatar'
+                className='w-10 h-10 rounded-full cursor-pointer'
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = 'https://picsum.photos/200/300';
+                }}
+              />
             </NavLink>
           ) : (
-            <>
-              <span className="text-white text-lg">Hi, &nbsp;
-                <span className="text-amber-500 font-semibold text-lg hover:scale-105 transition-transform duration-300 mr-4">
-                  {userLogin?.hoTen}
-                </span>
-              </span>
-
-              <button
-                onClick={() => {
-                  dispatch(logout());
-                  scrollTo(0, 0);
-                  setIsOpen(false);
-                }}
-                className="px-4 py-1 sm:px-7 sm:py-2 bg-red-500 hover:bg-red-600 transition rounded-full font-medium cursor-pointer text-white"
-              >
-                Logout
+            <div className="relative">
+              <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="flex items-center">
+                <img
+                  src='/img/avatarLogo.jpg'
+                  alt='Avatar'
+                  className='w-10 h-10 rounded-full cursor-pointer'
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://picsum.photos/200/300';
+                  }}
+                />
+                <ChevronDown
+                  className={`ml-4 w-6 h-6 text-amber-500 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}
+                />
               </button>
-            </>
-
+              <AnimatePresence>
+                {isDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
+                  >
+                    <NavLink
+                      to="/auth"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      Go to Admin Page
+                    </NavLink>
+                    <button
+                      onClick={() => {
+                        dispatch(logout());
+                        setIsDropdownOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           )}
-
         </div>
 
         {/* Menu Icon for Responsive Mode */}
@@ -479,6 +505,45 @@ export default function HomeHeader() {
                 </NavLink>
               </li>
 
+              {/*Login & Logout*/}
+              <li>
+                {!userLogin ? (
+                  <NavLink
+                    onClick={() => {
+                      scrollTo(0, 0);
+                      setIsOpen(false);
+                    }}
+                    to="/login"
+                    className={({ isActive }) =>
+                      `group flex flex-col items-center transition-all duration-300 ${isActive ? "text-red-400" : "text-gray-300 hover:text-red-400"
+                      }`
+                    }
+                  >
+                    <button className="px-4 py-1 sm:px-7 sm:py-2 bg-primary hover:bg-primary-dull transition rounded-full font-medium cursor-pointer">
+                      Login
+                    </button>
+                  </NavLink>
+                ) : (
+                  <>
+                    <span className="text-white text-lg">Hi, &nbsp;
+                      <span className="text-amber-500 font-semibold text-lg hover:scale-105 transition-transform duration-300 mr-4">
+                        {userLogin?.hoTen}
+                      </span>
+                    </span>
+
+                    <button
+                      onClick={() => {
+                        dispatch(logout());
+                        scrollTo(0, 0);
+                        setIsOpen(false);
+                      }}
+                      className="px-4 py-1 sm:px-7 sm:py-2 bg-red-500 hover:bg-red-600 transition rounded-full font-medium cursor-pointer text-white"
+                    >
+                      Logout
+                    </button>
+                  </>
+                )}
+              </li>
             </ul>
           </motion.nav>
         )}
