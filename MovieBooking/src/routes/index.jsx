@@ -39,6 +39,17 @@ const routes = [
         path: "login",
         element: React.createElement(lazy(() => import("../pages/HomeTemplate/Auth/Login"))),
       },
+      {
+        path: "checkout",
+        element: React.createElement(
+          PrivateRoute,
+          {
+            element: React.createElement(
+              lazy(() => import("../pages/HomeTemplate/TicketBooking/Checkout"))
+            )
+          }
+        ),
+      },
     ],
   },
 
