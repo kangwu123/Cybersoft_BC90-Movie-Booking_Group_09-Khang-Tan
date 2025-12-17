@@ -5,6 +5,7 @@ const initialState = {
     loading: false,
     seats: null,
     selectedSeats: [],
+    selectedFoods: [],
     error: null,
 };
 
@@ -47,6 +48,9 @@ const ticketBookingSlice = createSlice({
                 state.selectedSeats.push(maGhe);
             }
         },
+        setFoods: (state, action) => {
+            state.selectedFoods = action.payload;
+        },
         clearSeats: (state) => {
             state.selectedSeats = [];
         }
@@ -74,6 +78,7 @@ const ticketBookingSlice = createSlice({
             .addCase(datVe.fulfilled, (state) => {
                 state.loading = false;
                 state.selectedSeats = []; //  reset ghế sau khi đặt
+                state.selectedFoods = [];
             })
             .addCase(datVe.rejected, (state, action) => {
                 state.loading = false;
@@ -82,5 +87,5 @@ const ticketBookingSlice = createSlice({
     },
 });
 
-export const { toggleSeat, clearSeats } = ticketBookingSlice.actions;
+export const { toggleSeat, clearSeats,setFoods} = ticketBookingSlice.actions;
 export default ticketBookingSlice.reducer;
