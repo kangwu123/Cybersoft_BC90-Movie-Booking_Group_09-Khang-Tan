@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { fetchTicketBooking, toggleSeat, datVe, setFoods } from "./slice";
+import { fetchTicketBooking, toggleSeat, datVe, setFoods, clearSeats } from "./slice";
 import SeatList from "./SeatList";
 import FoodAndDrinkModal from "./FoodAndDrinkModal";
 import ConfirmBookingModal from "./ConfirmBookingModal";
-
+import { X } from "lucide-react";
 export default function TicketBooking() {
     const [searchParams] = useSearchParams();
     const maLichChieu = searchParams.get("maLichChieu");
@@ -157,15 +157,24 @@ export default function TicketBooking() {
 
             <div className="mt-6 bg-gray-800 p-5 rounded-xl shadow-lg">
                 <h3 className="text-xl font-semibold mb-3">Thông tin đặt vé</h3>
-                <p className="mb-2">
-                    <span className="font-semibold">Ghế đã chọn:</span>{" "}
-                    {selectedSeats.length > 0
-                        ? seats.danhSachGhe
-                            .filter((ghe) => selectedSeats.includes(ghe.maGhe))
-                            .map((ghe) => ghe.tenGhe)
-                            .join(", ")
-                        : "Chưa chọn ghế nào"}
-                </p>
+                <div className="flex items-center gap-4">
+                    <p className="mb-2">
+                        <span className="font-semibold">Ghế đã chọn:</span>{" "}
+                        {selectedSeats.length > 0
+                            ? seats.danhSachGhe
+                                .filter((ghe) => selectedSeats.includes(ghe.maGhe))
+                                .map((ghe) => ghe.tenGhe)
+                                .join(", ")
+                            : "Chưa chọn ghế nào"}
+                    </p>
+                     {selectedSeats.length > 0 && (
+                        <X
+                            className="cursor-pointer text-red-500 hover:text-red-700 mb-2"
+                            onClick={() => dispatch(clearSeats())}
+                        />
+                    )}
+                </div>
+
                 <p className="text-lg font-bold text-amber-400">
                     Tổng tiền: {tongTien.toLocaleString()} VND
                 </p>
