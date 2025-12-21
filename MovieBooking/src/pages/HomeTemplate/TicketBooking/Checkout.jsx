@@ -9,8 +9,9 @@ const Checkout = () => {
     const dispatch = useDispatch();
     const { bookingDetails } = location.state || {};
     const { maLichChieu } = bookingDetails.thongTinPhim;
-    const { userLogin } = useSelector((state) => state.user);
     const [totalDiscount, setTotalDiscount] = useState(0);
+    const [discountCode, setDiscountCode] = useState('');
+    const [discountMessage, setDiscountMessage] = useState({ text: '', type: '' });
 
     if (!bookingDetails) {
         return (
@@ -28,26 +29,23 @@ const Checkout = () => {
     const ticketTotal = selectedSeats.reduce((acc, s) => acc + s.giaVe, 0);
     const foodTotal = selectedFoods.reduce((acc, f) => acc + f.price * f.quantity, 0);
 
-    const getDiscount = () => {
-        if (!userLogin) return { ticketDiscount: 0, foodDiscount: 0 };
-
-        switch (userLogin.maLoaiNguoiDung) {
-            case 'U22Member':
-                return { ticketDiscount: 0.05, foodDiscount: 0.03 };
-            case 'VIP':
-                return { ticketDiscount: 0.07, foodDiscount: 0.04 };
-            case 'VVIP':
-                return { ticketDiscount: 0.1, foodDiscount: 0.05 };
-            default:
-                return { ticketDiscount: 0, foodDiscount: 0 };
-        }
+    const discountCodes = {
+        'CYBERSOFT10': 0.1,
+        'TANDEPZAI': 0.2,
+        'KHANGDEPTRAI': 0.5,
     };
 
     const handleApplyDiscount = () => {
-        const { ticketDiscount, foodDiscount } = getDiscount();
-        const ticketDiscountAmount = ticketTotal * ticketDiscount;
-        const foodDiscountAmount = foodTotal * foodDiscount;
-        setTotalDiscount(ticketDiscountAmount + foodDiscountAmount);
+        const code = discountCode.trim().toUpperCase();
+        if (discountCodes[code]) {
+            const discountRate = discountCodes[code];
+            const discountAmount = (ticketTotal + foodTotal) * discountRate;
+            setTotalDiscount(discountAmount);
+            setDiscountMessage({ text: 'Discount applied successfully!', type: 'success' });
+        } else {
+            setDiscountMessage({ text: 'Invalid discount code.', type: 'error' });
+            setTotalDiscount(0);
+        }
     };
 
     const finalTotal = ticketTotal + foodTotal - totalDiscount;
@@ -151,10 +149,17 @@ const Checkout = () => {
                             type="text"
                             placeholder="Enter discount code"
                             className="w-full p-2 border rounded-md"
+                            value={discountCode}
+                            onChange={(e) => setDiscountCode(e.target.value)}
                         />
                         <button onClick={handleApplyDiscount} className="w-full bg-gray-800 text-white mt-2 py-2 rounded-md">
                             Apply
                         </button>
+                        {discountMessage.text && (
+                            <p className={`mt-2 text-sm ${discountMessage.type === 'success' ? 'text-green-500' : 'text-red-500'}`}>
+                                {discountMessage.text}
+                            </p>
+                        )}
                     </div>
 
                     <button onClick={handlePayNow} className="w-full bg-red-600 text-white mt-6 py-3 rounded-md font-bold">
