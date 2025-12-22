@@ -8,10 +8,11 @@ import "slick-carousel/slick/slick-theme.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMovieList } from './../MovieList/slice';
 import { fetchMovieHome } from './slice';
-import {fetchMovieDetail} from '../MovieDetail/slice';
+import { fetchMovieDetail } from '../MovieDetail/slice';
 
 import MovieSlider from './MovieSlider';
 import Trailer from '../MovieList/Trailer';
+import NewBlog from './NewBlog';
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState('now');
@@ -156,7 +157,7 @@ const Home = () => {
     setSelectedMovie(maphim)
     setSelectedCinema("")
     setSelectedShowtime(null)
-    
+
     if (maphim) {
       dispatch(fetchMovieDetail(maphim))
     }
@@ -165,14 +166,14 @@ const Home = () => {
   const handlePlanBookingButton = () => {
     showAlert(true);
     setTimeout(() => {
-        setShowAlert(false);
-      }, 1500);
+      setShowAlert(false);
+    }, 1500);
   }
 
   const renderBookingButton = () => {
     if (!selectedShowtime) {
-      return(
-         <button
+      return (
+        <button
           disabled
           className="w-full md:w-64 py-3 rounded-full bg-[#555555] text-red-500 font-bold cursor-not-allowed uppercase"
         >
@@ -180,9 +181,9 @@ const Home = () => {
         </button>
       )
     }
-    if(userLogin){
-      return(
-          <Link
+    if (userLogin) {
+      return (
+        <Link
           to={`/buy-ticket?maLichChieu=${selectedShowtime.maLichChieu}`}
           state={{ duration: selectedShowtime.thoiLuong }}
           className="w-full md:w-64 py-3 flex items-center justify-center rounded-full bg-linear-to-r from-amber-400 to-orange-500 text-red-500 font-bold text-sm md:text-base shadow-xl transition-all hover:scale-105 hover:shadow-amber-500/40 cursor-pointer uppercase"
@@ -419,8 +420,8 @@ const Home = () => {
               </label>
 
               <select
-                  onChange={(e) => handleSelectMovie(e.target.value)}
-                  className="
+                onChange={(e) => handleSelectMovie(e.target.value)}
+                className="
       w-full px-5 py-3 rounded-full
       bg-black text-white
       border border-zinc-700
@@ -432,9 +433,9 @@ const Home = () => {
       focus:ring-2 focus:ring-amber-500/40
       hover:border-zinc-500
     "
-                >
-                  <option value="">-- Select Movie --</option>
-                  {renderPlanMovie()}
+              >
+                <option value="">-- Select Movie --</option>
+                {renderPlanMovie()}
               </select>
             </div>
 
@@ -444,10 +445,10 @@ const Home = () => {
                 Cinema
               </label>
 
-              <select value={selectedCinema} 
-                  onChange={(e) => setSelectedCinema(e.target.value)}
-                  disabled ={!dataDetail}
-                  className="
+              <select value={selectedCinema}
+                onChange={(e) => setSelectedCinema(e.target.value)}
+                disabled={!dataDetail}
+                className="
       w-full px-5 py-3 rounded-full
       bg-black text-white
       border border-zinc-700
@@ -461,12 +462,12 @@ const Home = () => {
     ">
                 <option value="">-- Select Cinema --</option>
                 {dataDetail?.heThongRapChieu.flatMap(heThong =>
-                    heThong.cumRapChieu.map(cumRap => (
-                      <option key={cumRap.maCumRap} value={cumRap.maCumRap}>
-                        {cumRap.tenCumRap}
-                      </option>
-                    ))
-                  )}
+                  heThong.cumRapChieu.map(cumRap => (
+                    <option key={cumRap.maCumRap} value={cumRap.maCumRap}>
+                      {cumRap.tenCumRap}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 
@@ -476,18 +477,18 @@ const Home = () => {
                 Time
               </label>
 
-            <select
-                  value={selectedShowtime?.maLichChieu || ""}
-                  onChange={(e) => {
-                    const lich = dataDetail.heThongRapChieu
-                      .flatMap(h => h.cumRapChieu)
-                      .flatMap(c => c.lichChieuPhim)
-                      .find(l => l.maLichChieu === e.target.value)
+              <select
+                value={selectedShowtime?.maLichChieu || ""}
+                onChange={(e) => {
+                  const lich = dataDetail.heThongRapChieu
+                    .flatMap(h => h.cumRapChieu)
+                    .flatMap(c => c.lichChieuPhim)
+                    .find(l => l.maLichChieu === e.target.value)
 
-                    setSelectedShowtime(lich)
-                  }}
-                  disabled={!selectedCinema}
-                  className="
+                  setSelectedShowtime(lich)
+                }}
+                disabled={!selectedCinema}
+                className="
       w-full px-5 py-3 rounded-full
       bg-black text-white
       border border-zinc-700
@@ -501,20 +502,20 @@ const Home = () => {
       disabled:opacity-40
       disabled:cursor-not-allowed
     "
-                >
-                  <option value="">-- Select Time --</option>
-                  {dataDetail?.heThongRapChieu.flatMap(h =>
-                    h.cumRapChieu
-                      .filter(c => c.maCumRap === selectedCinema)
-                      .flatMap(c =>
-                        c.lichChieuPhim.map(lich => (
-                          <option key={lich.maLichChieu} value={lich.maLichChieu}>
-                            {lich.ngayChieuGioChieu.slice(11, 16)}
-                          </option>
-                        ))
-                      )
-                  )}
-                </select>
+              >
+                <option value="">-- Select Time --</option>
+                {dataDetail?.heThongRapChieu.flatMap(h =>
+                  h.cumRapChieu
+                    .filter(c => c.maCumRap === selectedCinema)
+                    .flatMap(c =>
+                      c.lichChieuPhim.map(lich => (
+                        <option key={lich.maLichChieu} value={lich.maLichChieu}>
+                          {lich.ngayChieuGioChieu.slice(11, 16)}
+                        </option>
+                      ))
+                    )
+                )}
+              </select>
             </div>
 
             {/* Book Button */}
@@ -882,6 +883,8 @@ const Home = () => {
           <span>You’ll be notified when tickets are available</span>
         </div>
       )}
+      {/* News and Blogs  */}
+      <NewBlog />
     </>
   )
 }
