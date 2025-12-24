@@ -52,7 +52,7 @@ const ScheduleForm = () => {
                     alert('Vui lòng chọn phim!');
                     return;
                 }
-                
+
                 const [datePart, timePart] = values.ngayGioChieu.split('T');
                 const [year, month, day] = datePart.split('-');
                 const [hours, minutes] = timePart.split(':');
@@ -145,10 +145,8 @@ const ScheduleForm = () => {
                 <h2 className="text-2xl font-bold mb-6 text-amber-600">Tạo lịch chiếu - {movie ? movie.tenPhim : 'Chọn phim mới'}</h2>
                 <div className="flex flex-col md:flex-row gap-8">
                     <div className="w-full md:w-1/3">
-                        {movie ? (
+                        {movie && (
                             <img src={movie.hinhAnh} alt={movie.tenPhim} className="w-full h-auto rounded-lg shadow-lg" />
-                        ) : (
-                            <Upload onUpload={setHinhAnh} />
                         )}
                     </div>
                     <div className={movie ? "w-full md:w-2/3" : "w-full"}>
