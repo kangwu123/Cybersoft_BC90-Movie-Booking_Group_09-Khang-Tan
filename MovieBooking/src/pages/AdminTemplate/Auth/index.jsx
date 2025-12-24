@@ -42,9 +42,6 @@ const AuthTemplate = () => {
     if (data) {
         return <Navigate to="/admin" />;
     }
-    // Handle Submit use Formik & Yup
-    // Password policy: at least 8 chars, 1 upper, 1 lower, 1 number, 1 special
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     // Sign-in form
     const formikSignIn = useFormik({
@@ -55,8 +52,7 @@ const AuthTemplate = () => {
         validationSchema: Yup.object({
             taiKhoan: Yup.string().required("Tài khoản bắt buộc ko để trống"),
             matKhau: Yup.string()
-                .required("Mật khẩu bắt buộc để trống")
-                .matches(passwordRegex, "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt"),
+                .required("Mật khẩu bắt buộc ko để trống")
         }),
         onSubmit: (values) => {
             dispatch(authService(values));
@@ -74,8 +70,7 @@ const AuthTemplate = () => {
             taiKhoan: Yup.string().required("Tài khoản bắt buộc không để trống"),
             email: Yup.string().email("Email không hợp lệ").required("Email bắt buộc không để trống"),
             matKhau: Yup.string()
-                .required("Mật khẩu bắt buộc không để trống")
-                .matches(passwordRegex, "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt"),
+                .required("Mật khẩu bắt buộc không để trống"),
             confirmMatKhau: Yup.string()
                 .required("Xác nhận mật khẩu là bắt buộc")
                 .oneOf([Yup.ref('matKhau'), null], 'Mật khẩu không trùng khớp'),

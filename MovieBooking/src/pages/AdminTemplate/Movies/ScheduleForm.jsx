@@ -1,13 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchHeThongRap, fetchCumRap, createSchedule } from '../../AdminTemplate/TimeShow/slice';
+import { fetchMovieList } from '../../HomeTemplate/MovieList/slice';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useParams, useNavigate } from 'react-router-dom';
+import { api } from '../../../services/api';
 
-const ScheduleForm = ({ movie, onClose, onSaved }) => {
+const ScheduleForm = () => {
+    const { maPhim } = useParams();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { heThongRap, cumRap } = useSelector(s => s.timeshow);
+    const { data: movieList } = useSelector(s => s.movieListReducer);
+    const [movie, setMovie] = useState(null);
     const [danhSachRap, setDanhSachRap] = useState([]);
+    const [hinhAnh, setHinhAnh] = useState(null);
+
+    useEffect(() => {
+        if (maPhim) {
+            api.get(`/QuanLyPhim/LayThongTinPhim?MaPhim=${maPhim}`)
+                .then(response => {
+                    setMovie(response.data.content);
+                })
+                .catch(error => {
+                    console.error('Failed to fetch movie details:', error);
+                });
+        } else {
+            dispatch(fetchMovieList());
+        }
+    }, [maPhim, dispatch]);
 
     const formik = useFormik({
         initialValues: {
@@ -15,7 +37,7 @@ const ScheduleForm = ({ movie, onClose, onSaved }) => {
             maCumRap: '',
             maRap: '',
             ngayGioChieu: '',
-            giaVe: 75000,
+            giaVe: 75000 || '',
         },
         validationSchema: Yup.object({
             maHeThongRap: Yup.string().required('Cinema System is required'),
@@ -26,6 +48,10 @@ const ScheduleForm = ({ movie, onClose, onSaved }) => {
         }),
         onSubmit: async (values) => {
             try {
+                if (!movie) {
+                    alert('Vui lòng chọn phim!');
+                    return;
+                }
                 const payload = {
                     maPhim: movie.maPhim,
                     ngayChieuGioChieu: new Date(values.ngayGioChieu).toISOString(),
@@ -33,8 +59,7 @@ const ScheduleForm = ({ movie, onClose, onSaved }) => {
                     giaVe: values.giaVe,
                 };
                 await dispatch(createSchedule(payload)).unwrap();
-                if (onSaved) onSaved();
-                onClose();
+                navigate('/admin/movies');
             } catch (err) {
                 console.error('Failed to create schedule:', err);
             }
@@ -43,12 +68,10 @@ const ScheduleForm = ({ movie, onClose, onSaved }) => {
 
     const { values, setFieldValue, handleChange } = formik;
 
-    // Fetch cinema systems on component mount
     useEffect(() => {
         dispatch(fetchHeThongRap());
     }, [dispatch]);
 
-    // When the selected cinema system changes, fetch its clusters
     useEffect(() => {
         if (values.maHeThongRap) {
             dispatch(fetchCumRap(values.maHeThongRap));
@@ -57,14 +80,12 @@ const ScheduleForm = ({ movie, onClose, onSaved }) => {
         }
     }, [values.maHeThongRap, dispatch, setFieldValue]);
 
-    // When system list loads, auto-select the first one
     useEffect(() => {
         if (heThongRap?.length > 0) {
             setFieldValue('maHeThongRap', heThongRap[0].maHeThongRap);
         }
     }, [heThongRap, setFieldValue]);
 
-    // When cluster list loads, auto-select the first one
     useEffect(() => {
         if (cumRap?.length > 0) {
             setFieldValue('maCumRap', cumRap[0].maCumRap);
@@ -78,7 +99,6 @@ const ScheduleForm = ({ movie, onClose, onSaved }) => {
         setDanhSachRap(selectedCluster?.danhSachRap || []);
     }, [values.maCumRap, cumRap]);
 
-    // When room list is derived, auto-select the first one
     useEffect(() => {
         if (danhSachRap.length > 0) {
             setFieldValue('maRap', danhSachRap[0].maRap);
@@ -100,57 +120,92 @@ const ScheduleForm = ({ movie, onClose, onSaved }) => {
         setFieldValue('maRap', '');
     };
 
+    const handleMovieChange = (e) => {
+        const selectedMaPhim = e.target.value;
+        if (selectedMaPhim) {
+            const selectedMovie = movieList.find(m => m.maPhim == selectedMaPhim);
+            setMovie(selectedMovie);
+        } else {
+            setMovie(null);
+        }
+    };
+
+    if ((!movie && maPhim) || (!movieList && !maPhim)) {
+        return <div>Loading...</div>;
+    }
+
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-            <div className="text-gray-950 bg-blue-400 rounded-lg w-full max-w-2xl p-6">
-                <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-semibold text-red-600">Create Schedule: {movie.tenPhim}</h3>
-                    <button onClick={onClose} className="text-gray-600">Close</button>
+        <div className="p-6 min-h-screen">
+            <div className="bg-blue-300 p-8 rounded-lg shadow-md max-w-4xl mx-auto">
+                <h2 className="text-2xl font-bold mb-6 text-amber-600">Tạo lịch chiếu - {movie ? movie.tenPhim : 'Chọn phim mới'}</h2>
+                <div className="flex flex-col md:flex-row gap-8">
+                    <div className="w-full md:w-1/3">
+                        {movie ? (
+                            <img src={movie.hinhAnh} alt={movie.tenPhim} className="w-full h-auto rounded-lg shadow-lg" />
+                        ) : (
+                            <Upload onUpload={setHinhAnh} />
+                        )}
+                    </div>
+                    <div className={movie ? "w-full md:w-2/3" : "w-full"}>
+                        <form onSubmit={formik.handleSubmit} className="space-y-4">
+                            {!maPhim && (
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">Chọn phim</label>
+                                    <select
+                                        name="maPhim"
+                                        onChange={handleMovieChange}
+                                        className="mt-1 block w-full p-2 border border-amber-500 bg-white text-gray-900 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                        defaultValue=""
+                                    >
+                                        <option value="">-- Vui lòng chọn phim --</option>
+                                        {movieList?.map(m => (
+                                            <option key={m.maPhim} value={m.maPhim}>{m.tenPhim}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Hệ thống rạp</label>
+                                <select name="maHeThongRap" value={values.maHeThongRap} onChange={handleHeThongChange} className="mt-1 block w-full p-2 border border-amber-500 bg-white text-gray-900 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                    <option value="">Chọn hệ thống rạp</option>
+                                    {heThongRap?.map(h => <option key={h.maHeThongRap} value={h.maHeThongRap}>{h.tenHeThongRap}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Cụm rạp</label>
+                                <select name="maCumRap" value={values.maCumRap} onChange={handleCumRapChange} className="mt-1 block w-full p-2 border border-amber-500  bg-white text-gray-900 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" disabled={!values.maHeThongRap}>
+                                    <option value="">Chọn cụm rạp</option>
+                                    {cumRap?.map(c => <option key={c.maCumRap} value={c.maCumRap}>{c.tenCumRap}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Rạp</label>
+                                <select name="maRap" value={values.maRap} onChange={handleChange} className="mt-1 block w-full p-2 border border-amber-500  bg-white text-gray-900 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" disabled={!values.maCumRap}>
+                                    <option value="">Chọn rạp</option>
+                                    {danhSachRap.map(r => <option key={r.maRap} value={r.maRap}>{r.tenRap}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Ngày chiếu giờ chiếu</label>
+                                <input type="datetime-local" name="ngayGioChieu" value={values.ngayGioChieu} onChange={handleChange} className="mt-1 block w-full p-2 border border-amber-500  bg-white text-gray-900 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Giá vé</label>
+                                <input type="number" name="giaVe" value={values.giaVe} onChange={handleChange} className="mt-1 block w-full p-2 border border-amber-500  bg-white text-gray-900 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                            </div>
+                            <div className="flex justify-end gap-4">
+                                <button type="button" onClick={() => navigate('/admin/movies')} className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Hủy</button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                                    disabled={!formik.isValid || !movie}
+                                >
+                                    Tạo lịch chiếu
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <form onSubmit={formik.handleSubmit}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm text-gray-950">Cinema System</label>
-                            <select name="maHeThongRap" value={values.maHeThongRap} onChange={handleHeThongChange} className="w-full p-2 border border-gray-300 text-black rounded">
-                                <option value="">Select system</option>
-                                {heThongRap?.map(h => <option key={h.maHeThongRap} value={h.maHeThongRap}>{h.tenHeThongRap}</option>)}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm text-gray-950">Cinema Cluster</label>
-                            <select name="maCumRap" value={values.maCumRap} onChange={handleCumRapChange} className="w-full p-2 border border-gray-300 text-black rounded" disabled={!values.maHeThongRap}>
-                                <option value="">Select cluster</option>
-                                {cumRap?.map(c => <option key={c.maCumRap} value={c.maCumRap}>{c.tenCumRap}</option>)}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm text-gray-950">Room (Rạp)</label>
-                            <select name="maRap" value={values.maRap} onChange={handleChange} className="w-full p-2 border border-gray-300 text-black rounded" disabled={!values.maCumRap}>
-                                <option value="">Select room</option>
-                                {danhSachRap.map(r => (
-                                    <option key={r.maRap} value={r.maRap}>{r.tenRap}</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm text-gray-950">Date & Time</label>
-                            <input type="datetime-local" name="ngayGioChieu" value={values.ngayGioChieu} onChange={handleChange} className="w-full p-2 border border-gray-300 text-black rounded" />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm text-gray-950">Price</label>
-                            <input type="number" name="giaVe" value={values.giaVe} onChange={handleChange} className="w-full p-2 border border-gray-300 text-black rounded" />
-                        </div>
-                    </div>
-
-                    <div className="mt-4 flex justify-end gap-2">
-                        <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-200 rounded">Cancel</button>
-                        <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded">Create Schedule</button>
-                    </div>
-                </form>
             </div>
         </div>
     );

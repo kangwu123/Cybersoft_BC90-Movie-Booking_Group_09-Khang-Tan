@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { fetchMovieList } from '../../HomeTemplate/MovieList/slice'
 import Movie from './movie'
 import MovieForm from './MovieForm'
-import ScheduleForm from './ScheduleForm'
 import { fetchAdminMovieList, deleteMovie, fetchMovieDetail } from './slice'
 
 const Movies = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingMovie, setEditingMovie] = useState(null);
-    const [showScheduleModal, setShowScheduleModal] = useState(false);
-    const [scheduleMovie, setScheduleMovie] = useState(null);
+    const navigate = useNavigate();
 
     const dispatch = useDispatch()
 
@@ -65,7 +64,7 @@ const Movies = () => {
         return data?.map((movie) => {
             if (movie.dangChieu) {
                 return <Movie key={movie.maPhim} propMovie={movie}
-                    onSchedule={(m) => { setShowModal(false); setScheduleMovie(m); setShowScheduleModal(true); }}
+                    onSchedule={(m) => navigate(`/admin/movies/schedule/${m.maPhim}`)}
                     onEdit={(m) => { handleEdit(m.maPhim); }}
                     onDelete={(id) => { if (window.confirm('Delete this movie?')) { dispatch(deleteMovie(id)); } }}
                 />
@@ -77,7 +76,7 @@ const Movies = () => {
         return data?.map((movie) => {
             if (!movie.dangChieu) {
                 return <Movie key={movie.maPhim} propMovie={movie}
-                    onSchedule={(m) => { setShowModal(false); setScheduleMovie(m); setShowScheduleModal(true); }}
+                    onSchedule={(m) => navigate(`/admin/movies/schedule/${m.maPhim}`)}
                     onEdit={(m) => { handleEdit(m.maPhim); }}
                     onDelete={(id) => { if (window.confirm('Delete this movie?')) { dispatch(deleteMovie(id)); } }}
                 />
@@ -122,18 +121,6 @@ const Movies = () => {
                             <button onClick={() => setShowModal(false)} className="p-2 text-gray-600 hover:text-red-500"><i className="fa-solid fa-x" /></button>
                         </div>
                         <MovieForm initialValues={editingMovie} onClose={() => setShowModal(false)} onSaved={() => { setShowModal(false); dispatch(fetchMovieList()); dispatch(fetchAdminMovieList()); }} />
-                    </div>
-                </div>
-            )}
-
-            {showScheduleModal && scheduleMovie && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl relative">
-                        <div className="flex justify-between items-center p-4 border-b">
-                            <h3 className="text-lg font-semibold text-gray-800">Create Schedule for: {scheduleMovie.tenPhim}</h3>
-                            <button onClick={() => { setShowScheduleModal(false); setScheduleMovie(null) }} className="p-2 text-gray-600 hover:text-red-500"><i className="fa-solid fa-x" /></button>
-                        </div>
-                        <ScheduleForm movie={scheduleMovie} onClose={() => { setShowScheduleModal(false); setScheduleMovie(null) }} onSaved={() => { setShowScheduleModal(false); setScheduleMovie(null); }} />
                     </div>
                 </div>
             )}
@@ -209,5 +196,4 @@ const Movies = () => {
         </div>
     )
 }
-
 export default Movies

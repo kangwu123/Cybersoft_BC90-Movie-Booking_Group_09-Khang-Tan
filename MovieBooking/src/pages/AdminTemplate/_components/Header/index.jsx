@@ -5,6 +5,7 @@ const AdminHeader = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [isSettingsOpen, setSettingsOpen] = useState(false);
+    const [isMoviesOpen, setMoviesOpen] = useState(false);
     const location = useLocation();
 
     useEffect(() => {
@@ -22,6 +23,11 @@ const AdminHeader = () => {
     useEffect(() => {
         if (!location.pathname.startsWith('/admin/settings')) {
             setSettingsOpen(false);
+        }
+        if (location.pathname.startsWith('/admin/movies')) {
+            setMoviesOpen(true);
+        } else if (!location.pathname.startsWith('/admin/movies')) {
+            setMoviesOpen(false)
         }
     }, [location.pathname]);
 
@@ -57,19 +63,30 @@ const AdminHeader = () => {
                     <span className="nav-label" aria-hidden={collapsed}>Dashboard</span>
                 </NavLink>
 
-                <NavLink
-                    to="/admin/movies"
-                    title="Movies"
-                    className={({ isActive }) =>
-                        `nav-item flex items-center p-4 transition duration-150 ${isActive
+                <div>
+                    <button
+                        onClick={() => setMoviesOpen(!isMoviesOpen)}
+                        className={`nav-item flex items-center p-4 transition duration-150 w-full ${location.pathname.startsWith('/admin/movies')
                             ? "bg-white text-black"
                             : "hover:bg-gray-300 hover:text-black text-white"
-                        }`
-                    }
-                >
-                    <span className="mr-3"><i className="fi fi-ss-clapper-open"></i></span>
-                    <span className="nav-label" aria-hidden={collapsed}>Movies</span>
-                </NavLink>
+                            }`}>
+                        <span className="mr-3"><i className="fi fi-ss-clapper-open"></i></span>
+                        <span className="nav-label" aria-hidden={collapsed}>Movies</span>
+                        <span className={`transition-transform duration-300 ${isMoviesOpen ? 'rotate-180' : ''} ${!collapsed ? 'ml-auto' : ''}`}>
+                            <i className="fa-solid fa-chevron-down"></i>
+                        </span>
+                    </button>
+                    {isMoviesOpen && (
+                        <ul className="pl-2">
+                            <li>
+                                <NavLink to="/admin/movies" title="Movies List" end className={({ isActive }) => `flex items-center p-2 ${isActive ? 'text-blue-400' : 'text-white'}`}>
+                                    <span className="mr-3"><i className="fi fi-rr-film"></i></span>
+                                    <span className="nav-label" aria-hidden={collapsed}>Movies List</span>
+                                </NavLink>
+                            </li>
+                        </ul>
+                    )}
+                </div>
 
                 <NavLink
                     to="/admin/users"
