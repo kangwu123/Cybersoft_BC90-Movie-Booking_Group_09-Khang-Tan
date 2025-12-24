@@ -32,18 +32,20 @@ const MovieForm = ({ initialValues = null, onClose, onSaved }) => {
         onSubmit: async (values) => {
             try {
                 const formData = new FormData();
-                // API expects some fields; adapt to Cybersoft API
+                const formattedDate = values.ngayKhoiChieu.split('-').reverse().join('/');
+
                 formData.append('tenPhim', values.tenPhim);
                 formData.append('biDanh', values.biDanh || values.tenPhim);
                 formData.append('trailer', values.trailer || '');
                 formData.append('moTa', values.moTa);
-                formData.append('ngayKhoiChieu', values.ngayKhoiChieu);
+                formData.append('ngayKhoiChieu', formattedDate);
                 formData.append('danhGia', values.danhGia);
                 formData.append('hot', values.hot);
                 formData.append('dangChieu', values.dangChieu);
                 formData.append('sapChieu', values.sapChieu);
+                formData.append('maNhom', 'GP07');
                 if (fileObj) {
-                    formData.append('File', fileObj, fileObj.name);
+                    formData.append('hinhAnh', fileObj, fileObj.name);
                 }
 
                 if (initialValues && initialValues.maPhim) {

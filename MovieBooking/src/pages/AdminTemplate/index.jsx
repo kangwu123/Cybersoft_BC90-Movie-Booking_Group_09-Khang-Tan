@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, NavLink, useLocation } from "react-router-dom";
+import { Outlet, NavLink, useLocation, useNavigate } from "react-router-dom";
 import AdminHeader from "./_components/Header";
 import Switch from "./_components/Switch";
 import AdminFooter from "./_components/Footer";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const AdminTemplate = () => {
   const location = useLocation()
+  const navigate = useNavigate()
+  const adminUsername = localStorage.getItem('USER_ADMIN') ? JSON.parse(localStorage.getItem('USER_ADMIN')).taiKhoan : 'Admin';
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   const breadcrumbMap = {
     'admin': 'Home',
@@ -25,9 +34,12 @@ const AdminTemplate = () => {
     const seg = pathSegments[i]
     crumbs.push(breadcrumbMap[seg] || seg.charAt(0).toUpperCase() + seg.slice(1))
   }
-const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
+    if (location.state?.fromLogin) {
+      toast.success('Login Successful');
+    }
     const savedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(savedTheme);
   }, []);
@@ -45,17 +57,35 @@ const [theme, setTheme] = useState('dark');
     setTheme(prevTheme => (prevTheme === 'dark' ? 'light' : 'dark'));
   };
 
+  const handleLogout = () => {
+    MySwal.fire({
+      title: 'You are processing to logout this Page!',
+      text: "Please confirm to proceed. Are you sure want to Logout?",
+      icon: 'error',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, log out!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('USER_ADMIN');
+        navigate('/auth');
+      }
+    });
+  };
+
   return (
     <div className="admin-layout">
       <AdminHeader theme={theme} />
       <div className={`flex-5 overflow-y-auto ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-200'}`}>
+        <ToastContainer />
         {/* Header */}
-        <header className={`p-4 flex justify-between items-center sticky top-0 z-10 ${theme === 'dark' ? 'bg-gray-900' : 'bg-white shadow-md'}`}>          
-        {/* Search */}
+        <header className={`p-4 flex justify-between items-center sticky top-0 z-10 ${theme === 'dark' ? 'bg-gray-900' : 'bg-white shadow-md'}`}>
+          {/* Search */}
           <div className="flex items-center gap-3">
             {/* Input with search icon */}
             <div className="relative w-64 md:w-80">
-              <span className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>                
+              <span className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${theme === 'dark' ? 'text-gray-500' : 'text-gray-400'}`}>
                 <i className="fa-solid fa-magnifying-glass"></i>
               </span>
               <input
@@ -77,8 +107,8 @@ const [theme, setTheme] = useState('dark');
             <Switch theme={theme} onToggle={toggleTheme} />
             {/* Bell */}
             <button className="relative p-2 cursor-pointer group">
-                <i className={`fa-solid fa-bell text-lg animate-bell transition-colors duration-300 group-hover:text-red-500 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}></i>             
-                <span className={`absolute top-1 right-2 w-3 h-3 bg-red-500 rounded-full border-2 ${theme === 'dark' ? 'border-gray-900' : 'border-white'}`}></span>
+              <i className={`fa-solid fa-bell text-lg animate-bell transition-colors duration-300 group-hover:text-red-500 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}></i>
+              <span className={`absolute top-1 right-2 w-3 h-3 bg-red-500 rounded-full border-2 ${theme === 'dark' ? 'border-gray-900' : 'border-white'}`}></span>
             </button>
 
             {/* Message */}
@@ -87,49 +117,48 @@ const [theme, setTheme] = useState('dark');
               <span className={`absolute top-1 right-0 w-3 h-3 bg-red-500 rounded-full border-2 ${theme === 'dark' ? 'border-gray-900' : 'border-white'}`}></span>
             </button>
 
-            {/* Greeting */}
-            <span className={`text-gray-700 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-              Hi, <strong className={theme === 'dark' ? 'text-white font-semibold' : 'text-gray-900 font-semibold'}>Admin</strong>
-            </span>
-
-            {/* Avatar */}
-            <div className={`w-10 h-10 rounded-full overflow-hidden border-2 cursor-pointer ${theme === 'dark' ? 'border-gray-600' : 'border-gray-300'}`}>
-              <img
-                src="/img/avatarLogo.jpg"
-                alt="avatar"
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Dropdown Logout */}
-            <div className="relative inline-block text-left">
-              <button
-                id="dropdownDefaultButton"
-                data-dropdown-toggle="dropdown"
-                className={`flex items-center justify-center p-2 rounded-full transition duration-300 cursor-pointer ${theme === 'dark' ? 'bg-gray-900 hover:bg-gray-800' : 'bg-white hover:bg-gray-100'}`}
-              >
-              <i className={`fa-solid fa-chevron-down ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}></i>
+            <div className="relative">
+              <button onClick={() => setDropdownOpen(!isDropdownOpen)} className={`flex items-center gap-2 text-gray-700 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <span>Hi,
+                  <strong className={theme === 'dark' ? 'text-amber-500 font-semibold' : 'text-red-600 font-semibold'}>{adminUsername || ''}</strong></span>
+                <div className={`w-10 h-10 rounded-full overflow-hidden border-2 cursor-pointer ${theme === 'dark' ? 'border-gray-600' : 'border-gray-300'}`}>
+                  <img
+                    src="/img/avatarLogo.jpg"
+                    alt="avatar"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://picsum.photos/200/300';
+                    }}
+                  />
+                </div>
+                <i className={`fa-solid fa-chevron-down transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''} ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}></i>
               </button>
-
-              {/* Dropdown Menu */}
-              <div
-                id="dropdown"
-                className={`absolute right-0 mt-3 w-48 rounded-2xl shadow-xl border ring-1 hidden z-50 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 ring-gray-700' : 'bg-white border-gray-100 ring-gray-200'}`}
-              >
-                <ul className={`py-2 text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <li>
-                    <a
-                      href="#"
-                      className={`flex items-center w-full px-4 py-2 rounded-lg transition-all duration-200 ${theme === 'dark' ? 'hover:bg-gray-700 hover:text-white' : 'hover:bg-blue-50 hover:text-blue-600'}`}
-                    >
-                      Logout
-                    </a>
-                  </li>
-                </ul>
-              </div>
+              {isDropdownOpen && (
+                <div className={`absolute right-0 mt-3 w-48 rounded-2xl shadow-xl border ring-1 z-50 ${theme === 'dark' ? 'bg-gray-800 border-gray-700 ring-gray-700' : 'bg-white border-gray-100 ring-gray-200'}`}>
+                  <ul className={`py-2 text-sm font-medium ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <li>
+                      <button
+                        onClick={() => navigate('/')}
+                        className={`flex items-center w-full px-4 py-2 rounded-lg transition-all duration-200 ${theme === 'dark' ? 'hover:bg-gray-700 hover:text-white' : 'hover:bg-blue-50 hover:text-blue-600'}`}
+                      >
+                        Go to Home Page
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={handleLogout}
+                        className={`flex items-center w-full px-4 py-2 rounded-lg transition-all duration-200 ${theme === 'dark' ? 'hover:bg-gray-700 hover:text-white' : 'hover:bg-blue-50 hover:text-blue-600'}`}
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
-        </header>
+      </header>
 
         {/* Main Content */}
         <main className="p-6 content-container">

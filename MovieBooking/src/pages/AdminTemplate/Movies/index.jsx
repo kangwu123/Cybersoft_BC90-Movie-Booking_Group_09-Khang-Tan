@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { fetchMovieList } from '../../HomeTemplate/MovieList/slice'
 import Movie from './movie'
 import MovieForm from './MovieForm'
-import ScheduleForm from './ScheduleForm'
 import { fetchAdminMovieList, deleteMovie, fetchMovieDetail } from './slice'
 
 const Movies = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingMovie, setEditingMovie] = useState(null);
-    const [showScheduleModal, setShowScheduleModal] = useState(false);
-    const [scheduleMovie, setScheduleMovie] = useState(null);
+    const navigate = useNavigate();
 
     const dispatch = useDispatch()
 
@@ -65,7 +64,7 @@ const Movies = () => {
         return data?.map((movie) => {
             if (movie.dangChieu) {
                 return <Movie key={movie.maPhim} propMovie={movie}
-                    onSchedule={(m) => { setShowModal(false); setScheduleMovie(m); setShowScheduleModal(true); }}
+                    onSchedule={(m) => navigate(`/admin/movies/schedule/${m.maPhim}`)}
                     onEdit={(m) => { handleEdit(m.maPhim); }}
                     onDelete={(id) => { if (window.confirm('Delete this movie?')) { dispatch(deleteMovie(id)); } }}
                 />
@@ -77,7 +76,7 @@ const Movies = () => {
         return data?.map((movie) => {
             if (!movie.dangChieu) {
                 return <Movie key={movie.maPhim} propMovie={movie}
-                    onSchedule={(m) => { setShowModal(false); setScheduleMovie(m); setShowScheduleModal(true); }}
+                    onSchedule={(m) => navigate(`/admin/movies/schedule/${m.maPhim}`)}
                     onEdit={(m) => { handleEdit(m.maPhim); }}
                     onDelete={(id) => { if (window.confirm('Delete this movie?')) { dispatch(deleteMovie(id)); } }}
                 />
@@ -126,18 +125,6 @@ const Movies = () => {
                 </div>
             )}
 
-            {showScheduleModal && scheduleMovie && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl relative">
-                        <div className="flex justify-between items-center p-4 border-b">
-                            <h3 className="text-lg font-semibold text-gray-800">Create Schedule for: {scheduleMovie.tenPhim}</h3>
-                            <button onClick={() => { setShowScheduleModal(false); setScheduleMovie(null) }} className="p-2 text-gray-600 hover:text-red-500"><i className="fa-solid fa-x" /></button>
-                        </div>
-                        <ScheduleForm movie={scheduleMovie} onClose={() => { setShowScheduleModal(false); setScheduleMovie(null) }} onSaved={() => { setShowScheduleModal(false); setScheduleMovie(null); }} />
-                    </div>
-                </div>
-            )}
-
             <div className="space-y-6">
                 <div className="bg-blue-300 p-6 rounded-2xl shadow-lg border border-blue-300">
                     <h2 className="text-2xl font-semibold mb-6 border-b pb-2 text-gray-800">Now Showing Movies</h2>
@@ -158,7 +145,7 @@ const Movies = () => {
                                         Release Date
                                     </th>
                                     <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">
-                                        Showtime
+                                        Schedule
                                     </th>
                                     <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">
                                         Actions
@@ -191,7 +178,7 @@ const Movies = () => {
                                         Release Date
                                     </th>
                                     <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">
-                                        Showtime
+                                        Schedule
                                     </th>
                                     <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-center">
                                         Actions
@@ -209,5 +196,4 @@ const Movies = () => {
         </div>
     )
 }
-
 export default Movies

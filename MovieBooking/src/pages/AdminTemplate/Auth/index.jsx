@@ -10,7 +10,56 @@ const AuthTemplate = () => {
     const dispatch = useDispatch();
     const { loading, data } = useSelector((state) => state.authLoginReducer || {});
     const [active, setActive] = useState(false); // toggle for sign-up / sign-in
-    // Handle Loading
+
+    // Sign-in form
+    const formikSignIn = useFormik({
+        initialValues: {
+            taiKhoan: "",
+            matKhau: "",
+        },
+        validationSchema: Yup.object({
+            taiKhoan: Yup.string().required("Tài khoản bắt buộc ko để trống"),
+            matKhau: Yup.string()
+                .required("Mật khẩu bắt buộc ko để trống")
+        }),
+        onSubmit: (values) => {
+            dispatch(authService(values));
+        },
+    });
+    // Sign-up form (separate instance)
+    const formikSignUp = useFormik({
+        initialValues: {
+            taiKhoan: "",
+            email: "",
+            matKhau: "",
+            confirmMatKhau: "",
+        },
+        validationSchema: Yup.object({
+            taiKhoan: Yup.string().required("Tài khoản bắt buộc không để trống"),
+            email: Yup.string().email("Email không hợp lệ").required("Email bắt buộc không để trống"),
+            matKhau: Yup.string()
+                .required("Mật khẩu bắt buộc không để trống"),
+            confirmMatKhau: Yup.string()
+                .required("Xác nhận mật khẩu là bắt buộc")
+                .oneOf([Yup.ref('matKhau'), null], 'Mật khẩu không trùng khớp'),
+        }),
+        onSubmit: (values) => {
+            // Replace with real register action when available
+            // For now, log and notify success
+            // eslint-disable-next-line no-console
+            console.log('Register payload', values);
+            // simple feedback — you may replace with your own UI toast
+            alert('Đăng ký thành công (demo)');
+            setActive(false);
+        },
+    });
+
+    // UI state to toggle show/hide password fields
+    const [showPasswordSignIn, setShowPasswordSignIn] = useState(false);
+    const [showPasswordSignUp, setShowPasswordSignUp] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+      // Handle Loading
     if (loading) {
         return (
             <div className="flex flex-col items-center justify-center h-64">
@@ -42,60 +91,6 @@ const AuthTemplate = () => {
     if (data) {
         return <Navigate to="/admin" />;
     }
-    // Handle Submit use Formik & Yup
-    // Password policy: at least 8 chars, 1 upper, 1 lower, 1 number, 1 special
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-    // Sign-in form
-    const formikSignIn = useFormik({
-        initialValues: {
-            taiKhoan: "",
-            matKhau: "",
-        },
-        validationSchema: Yup.object({
-            taiKhoan: Yup.string().required("Tài khoản bắt buộc ko để trống"),
-            matKhau: Yup.string()
-                .required("Mật khẩu bắt buộc để trống")
-                .matches(passwordRegex, "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt"),
-        }),
-        onSubmit: (values) => {
-            dispatch(authService(values));
-        },
-    });
-    // Sign-up form (separate instance)
-    const formikSignUp = useFormik({
-        initialValues: {
-            taiKhoan: "",
-            email: "",
-            matKhau: "",
-            confirmMatKhau: "",
-        },
-        validationSchema: Yup.object({
-            taiKhoan: Yup.string().required("Tài khoản bắt buộc không để trống"),
-            email: Yup.string().email("Email không hợp lệ").required("Email bắt buộc không để trống"),
-            matKhau: Yup.string()
-                .required("Mật khẩu bắt buộc không để trống")
-                .matches(passwordRegex, "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt"),
-            confirmMatKhau: Yup.string()
-                .required("Xác nhận mật khẩu là bắt buộc")
-                .oneOf([Yup.ref('matKhau'), null], 'Mật khẩu không trùng khớp'),
-        }),
-        onSubmit: (values) => {
-            // Replace with real register action when available
-            // For now, log and notify success
-            // eslint-disable-next-line no-console
-            console.log('Register payload', values);
-            // simple feedback — you may replace with your own UI toast
-            alert('Đăng ký thành công (demo)');
-            setActive(false);
-        },
-    });
-
-    // UI state to toggle show/hide password fields
-    const [showPasswordSignIn, setShowPasswordSignIn] = useState(false);
-    const [showPasswordSignUp, setShowPasswordSignUp] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
     return (
         <div className={`container${active ? ' active' : ''}`} id="container">
             {/* Form Đăng Ký */}
