@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../../../services/api';
+import { toast } from 'react-toastify';
 
 const ScheduleForm = () => {
     const { maPhim } = useParams();
@@ -64,9 +65,13 @@ const ScheduleForm = () => {
                     giaVe: values.giaVe,
                 };
                 await dispatch(createSchedule(payload)).unwrap();
-                navigate('/admin/movies');
+                toast.success('Tạo lịch chiếu thành công!');
+                setTimeout(() => {
+                    navigate('/admin/movies');
+                }, 1000);
             } catch (err) {
                 console.error('Failed to create schedule:', err);
+                toast.error('Tạo lịch chiếu thất bại!');
             }
         },
     });
