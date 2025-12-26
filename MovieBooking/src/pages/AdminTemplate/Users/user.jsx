@@ -1,6 +1,7 @@
 import React from 'react'
+import { Checkbox } from '@mui/material';
 
-const User = ({ propUser, onEdit, onDelete }) => {
+const User = ({ propUser, onEdit, onDelete, isSelected, onCheckboxClick }) => {
     const roleClass = propUser.maLoaiNguoiDung === 'QuanTri'
         ? 'text-red-500'
         : 'text-green-500';
@@ -9,6 +10,16 @@ const User = ({ propUser, onEdit, onDelete }) => {
         <tr
             key={propUser.taiKhoan}
             className="hover:bg-gray-50 transition-colors duration-150 cursor-pointer">
+            <td padding="checkbox">
+                <Checkbox
+                    color="primary"
+                    checked={isSelected}
+                    onChange={(event) => onCheckboxClick(event, propUser.taiKhoan)}
+                    inputProps={{
+                        'aria-labelledby': `enhanced-table-checkbox-${propUser.taiKhoan}`,
+                    }}
+                />
+            </td>
             <td className="px-6 py-4 text-sm text-black text-center">{propUser.taiKhoan}</td>
             <td className="px-6 py-4 text-sm text-gray-700 max-w-[150px] wrap-break-word whitespace-normal">{propUser.hoTen}</td>
             <td className="px-6 py-4 text-sm text-gray-700 max-w-[200px] wrap-break-words whitespace-normal">{propUser.email}</td>

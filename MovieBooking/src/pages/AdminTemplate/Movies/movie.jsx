@@ -1,6 +1,18 @@
-const Movie = ({ propMovie, onSchedule, onEdit, onDelete }) => {
+import { Checkbox } from "@mui/material";
+
+const Movie = ({ propMovie, onSchedule, onEdit, onDelete, isSelected, onCheckboxClick }) => {
     return (
         <tr key={propMovie.maPhim} className="hover:bg-gray-50 transition-colors duration-300">
+            <td padding="checkbox">
+                <Checkbox
+                    color="primary"
+                    checked={isSelected}
+                    onChange={(event) => onCheckboxClick(event, propMovie.maPhim)}
+                    inputProps={{
+                        'aria-labelledby': `enhanced-table-checkbox-${propMovie.maPhim}`,
+                    }}
+                />
+            </td>
             <td className="px-6 py-4 text-sm text-black text-center font-bold">{propMovie.maPhim}</td>
 
             <td className="px-6 py-4 text-center">
@@ -36,7 +48,7 @@ const Movie = ({ propMovie, onSchedule, onEdit, onDelete }) => {
                 </button>
                 <button onClick={() => onDelete && onDelete(propMovie.maPhim)} className="text-red-600 hover:text-red-900 px-3 py-1 rounded-md bg-gray-100 hover:bg-red-50 transition">
                     <i className="fi fi-rr-trash"></i>
-                </button>   
+                </button>
             </td>
         </tr>
     )
