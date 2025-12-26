@@ -15,13 +15,9 @@ export const authService = createAsyncThunk(
     async (user, { rejectWithValue }) => {
         try {
             const response = await api.post("QuanLyNguoiDung/DangNhap", user);
-            const roles = response.data.maloaiNguoiDung;
+            const roles = response.data.content.maLoaiNguoiDung;
             if (roles === "KhachHang") {
-                return rejectWithValue({
-                    response: {
-                        data: { content: "Bạn không có quyền truy cập vào trang này." },
-                    },
-                });
+                return rejectWithValue({ content: "Account của Bạn ko phải là Admin nên không có quyền truy cập vào trang này" });
             }
             const convertToString = JSON.stringify(response.data.content);
             localStorage.setItem("USER_ADMIN", convertToString);
