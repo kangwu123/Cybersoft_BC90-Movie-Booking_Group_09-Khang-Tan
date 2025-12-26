@@ -181,7 +181,7 @@ export default function HomeHeader() {
                   scrollTo(0, 0);
                   setIsOpen(false);
                 }}
-                to="*"
+                to="/contact"
                 className={({ isActive }) =>
                   `group flex flex-col items-center transition-all duration-300 ${isActive ? 'text-red-400' : 'text-gray-300 hover:text-red-400'
                   }`
