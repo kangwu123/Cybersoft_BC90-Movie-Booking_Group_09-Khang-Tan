@@ -1,16 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { authService } from './slice'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import './formlogin.css';
+import Swal from 'sweetalert2';
 
 const AuthTemplate = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { loading, data } = useSelector((state) => state.authLoginReducer || {});
+    const { loading, data, error } = useSelector((state) => state.authLoginReducer || {});
     const [active, setActive] = useState(false); // toggle for sign-up / sign-in
 
+    useEffect(() => {
+        if (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops Oh No!...',
+                text: error.content,
+                showCancelButton: true,
+                confirmButtonText: 'Thử lại',
+                cancelButtonText: 'Hủy bỏ',
+                customClass: {
+                    confirmButton: 'btn-try-again',
+                    cancelButton: 'btn-cancel'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Do nothing, let the user try again
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    navigate('/');
+                }
+            });
+        }
+    }, [error, navigate]);
     // Sign-in form
     const formikSignIn = useFormik({
         initialValues: {
@@ -59,7 +83,7 @@ const AuthTemplate = () => {
     const [showPasswordSignUp, setShowPasswordSignUp] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-      // Handle Loading
+    // Handle Loading
     if (loading) {
         return (
             <div className="flex flex-col items-center justify-center h-64">

@@ -8,6 +8,7 @@ import {
 
 const Dashboard = () => {
   const [messagesBuy, setMessagesBuy] = useState([]);
+  const [isMounted, setIsMounted] = useState(false);
   const revenueData = [
     { day: 'Mon', value: 2000 },
     { day: 'Tue', value: 3000 },
@@ -21,6 +22,7 @@ const Dashboard = () => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
   useEffect(() => {
+    setIsMounted(true);
     const interval = setInterval(() => {
       setMessagesBuy((previousMessage) => {
         if (previousMessage.length >= 8) {
@@ -40,27 +42,27 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
         <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border-l-4 border-blue-700 dark:border-blue-500 hover:shadow-xl transition-shadow duration-300">
           <p className="text-sm font-medium text-gray-500 dark:text-emerald-800">Total Revenue</p>
-          <CountUp start={0} end={12500} duration={3} separator="," prefix="$" enableScrollSpy preserveValue className="text-2xl font-bold text-black dark:text-amber-600 mt-1" />
+          <div className="text-2xl font-bold text-black dark:text-amber-600 mt-1">{isMounted && <CountUp start={0} end={12500} duration={3} separator="," prefix="$" />}</div>
         </div>
         <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border-l-4 border-green-900 dark:border-green-500 hover:shadow-xl transition-shadow duration-300">
           <p className="text-sm font-medium text-gray-500 dark:text-emerald-800">Tickets Sold</p>
-          <CountUp start={0} end={500} duration={3} separator="," enableScrollSpy preserveValue className="text-2xl font-bold text-black dark:text-amber-600 mt-1" />
+          <div className="text-2xl font-bold text-black dark:text-amber-600 mt-1">{isMounted && <CountUp start={0} end={500} duration={3} separator="," />}</div>
         </div>
         <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border-l-4 border-yellow-900 dark:border-yellow-500 hover:shadow-xl transition-shadow duration-300">
           <p className="text-sm font-medium text-gray-500 dark:text-emerald-800">Movies Showing</p>
-          <CountUp start={0} end={5} duration={3} separator="," enableScrollSpy preserveValue className="text-2xl font-bold text-black dark:text-amber-600 mt-1" />
+          <div className="text-2xl font-bold text-black dark:text-amber-600 mt-1">{isMounted && <CountUp start={0} end={5} duration={3} separator="," />}</div>
         </div>
         <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border-l-4 border-red-800 dark:border-red-500 hover:shadow-xl transition-shadow duration-300">
           <p className="text-sm font-medium text-gray-500 dark:text-emerald-800">New Users</p>
-          <CountUp start={0} end={50} duration={3} separator="," enableScrollSpy preserveValue className="text-2xl font-bold text-black dark:text-amber-600 mt-1" />
+          <div className="text-2xl font-bold text-black dark:text-amber-600 mt-1">{isMounted && <CountUp start={0} end={50} duration={3} separator="," />}</div>
         </div>
         <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border-l-4 border-purple-600 dark:border-purple-500 hover:shadow-xl transition-shadow duration-300">
           <p className="text-sm font-medium text-gray-500 dark:text-emerald-800">Active Screens</p>
-          <CountUp start={0} end={8} duration={3} enableScrollSpy preserveValue className="text-2xl font-bold text-black dark:text-amber-600 mt-1" />
+          <div className="text-2xl font-bold text-black dark:text-amber-600 mt-1">{isMounted && <CountUp start={0} end={8} duration={3} />}</div>
         </div>
         <div className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border-l-4 border-pink-600 dark:border-pink-500 hover:shadow-xl transition-shadow duration-300">
           <p className="text-sm font-medium text-gray-500 dark:text-emerald-800">Bookings Today</p>
-          <CountUp start={0} end={120} duration={3} enableScrollSpy preserveValue className="text-2xl font-bold text-black dark:text-amber-600 mt-1" />
+          <div className="text-2xl font-bold text-black dark:text-amber-600 mt-1">{isMounted && <CountUp start={0} end={120} duration={3} />}</div>
         </div>
       </div>
 
