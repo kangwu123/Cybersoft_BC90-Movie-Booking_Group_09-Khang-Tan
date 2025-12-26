@@ -3,10 +3,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserData, deleteUser } from './slice'
 import User from './user'
 import UserForm from './UserForm'
+import { Pagination, Checkbox, TextField, InputAdornment, IconButton, Menu, MenuItem } from '@mui/material';
+import { useDebounce } from 'use-debounce';
+import { Search, FilterList } from '@mui/icons-material';
 
 const Users = () => {
     const [showUserModal, setShowUserModal] = useState(false);
     const [editingUser, setEditingUser] = useState(null);
+    const [page, setPage] = useState(1);
+    const [khachHangPage, setKhachHangPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
+    const [quanTriSelected, setQuanTriSelected] = useState([]);
+    const [khachHangSelected, setKhachHangSelected] = useState([]);
+    const [filterAnchorEl, setFilterAnchorEl] = useState(null);
+    const [filterColumns, setFilterColumns] = useState(['taiKhoan']);
 
     const dispatch = useDispatch()
 
@@ -14,12 +25,101 @@ const Users = () => {
 
     const { dataUsers, loading } = stateUser
 
+    const handleFilterOpen = (event) => {
+        setFilterAnchorEl(event.currentTarget);
+    };
+
+    const handleFilterClose = () => {
+        setFilterAnchorEl(null);
+    };
+
+    const handleFilterColumnToggle = (column) => {
+        setFilterColumns(prev =>
+            prev.includes(column)
+                ? prev.filter(c => c !== column)
+                : [...prev, column]
+        );
+    };
+
+    const filteredData = dataUsers?.filter(user => {
+        if (!debouncedSearchTerm) return true;
+        return filterColumns.some(column =>
+            user[column]?.toString().toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+        );
+    });
+
+    const quanTriUsers = filteredData?.filter(user => user.maLoaiNguoiDung === 'QuanTri');
+    const khachHangUsers = filteredData?.filter(user => user.maLoaiNguoiDung === 'KhachHang');
+
+    const itemsPerPage = 5;
+    const quanTriCount = Math.ceil(quanTriUsers?.length / itemsPerPage);
+    const khachHangCount = Math.ceil(khachHangUsers?.length / itemsPerPage);
+
+    const paginatedQuanTriData = quanTriUsers?.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+    const paginatedKhachHangData = khachHangUsers?.slice((khachHangPage - 1) * itemsPerPage, khachHangPage * itemsPerPage);
+
     useEffect(() => {
         dispatch(fetchUserData())
     }, [])
 
-    const quanTriUsers = dataUsers?.filter(user => user.maLoaiNguoiDung === 'QuanTri');
-    const khachHangUsers = dataUsers?.filter(user => user.maLoaiNguoiDung === 'KhachHang');
+    const handleQuanTriSelectAllClick = (event) => {
+        if (event.target.checked) {
+            const newSelecteds = paginatedQuanTriData.map((n) => n.taiKhoan);
+            setQuanTriSelected(newSelecteds);
+            return;
+        }
+        setQuanTriSelected([]);
+    };
+
+    const handleKhachHangSelectAllClick = (event) => {
+        if (event.target.checked) {
+            const newSelecteds = paginatedKhachHangData.map((n) => n.taiKhoan);
+            setKhachHangSelected(newSelecteds);
+            return;
+        }
+        setKhachHangSelected([]);
+    };
+
+    const handleQuanTriClick = (event, name) => {
+        const selectedIndex = quanTriSelected.indexOf(name);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(quanTriSelected, name);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(quanTriSelected.slice(1));
+        } else if (selectedIndex === quanTriSelected.length - 1) {
+            newSelected = newSelected.concat(quanTriSelected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                quanTriSelected.slice(0, selectedIndex),
+                quanTriSelected.slice(selectedIndex + 1),
+            );
+        }
+        setQuanTriSelected(newSelected);
+    };
+
+    const handleKhachHangClick = (event, name) => {
+        const selectedIndex = khachHangSelected.indexOf(name);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(khachHangSelected, name);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(khachHangSelected.slice(1));
+        } else if (selectedIndex === khachHangSelected.length - 1) {
+            newSelected = newSelected.concat(khachHangSelected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                khachHangSelected.slice(0, selectedIndex),
+                khachHangSelected.slice(selectedIndex + 1),
+            );
+        }
+        setKhachHangSelected(newSelected);
+    };
+
+    const isQuanTriSelected = (name) => quanTriSelected.indexOf(name) !== -1;
+    const isKhachHangSelected = (name) => khachHangSelected.indexOf(name) !== -1;
 
     if (loading) {
         return (
@@ -49,9 +149,11 @@ const Users = () => {
         )
     }
 
-    const renderUsers = (users) => {
+    const renderUsers = (users, isQuanTri) => {
         return users?.map((user) => {
-            return <User key={user.taiKhoan} propUser={user} onEdit={(u) => { setEditingUser(u); setShowUserModal(true) }} onDelete={async (taiKhoan) => { if (confirm('Delete user?')) { await dispatch(deleteUser(taiKhoan)).unwrap(); dispatch(fetchUserData()) } }} />
+            const isItemSelected = isQuanTri ? isQuanTriSelected(user.taiKhoan) : isKhachHangSelected(user.taiKhoan);
+            const handleClick = isQuanTri ? handleQuanTriClick : handleKhachHangClick;
+            return <User key={user.taiKhoan} propUser={user} onEdit={(u) => { setEditingUser(u); setShowUserModal(true) }} onDelete={async (taiKhoan) => { if (confirm('Delete user?')) { await dispatch(deleteUser(taiKhoan)).unwrap(); dispatch(fetchUserData()) } }} isSelected={isItemSelected} onCheckboxClick={(event) => handleClick(event, user.taiKhoan)} />
         })
     }
 
@@ -61,18 +163,45 @@ const Users = () => {
             <h1 className="text-3xl font-bold text-black dark:text-amber-600 mb-6">User Management</h1>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div className="flex w-full md:w-1/2 gap-2">
-                    <input
-                        type="text"
+                    <TextField
+                        fullWidth
+                        variant="outlined"
                         placeholder="Search User..."
-                        className="flex-1 p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition shadow-sm"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Search />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
-                    <button className="flex items-center gap-2 px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-700 
-    hover:bg-indigo-50 hover:border-indigo-300 hover:text-indigo-600 
-    focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1 
-    transition-all duration-500 shadow-sm cursor-pointer font-medium">
-                        <i className="fi fi-rr-bars-filter"></i>
-                        Filter
-                    </button>
+                    <IconButton onClick={handleFilterOpen}>
+                        <FilterList />
+                    </IconButton>
+                    <Menu
+                        anchorEl={filterAnchorEl}
+                        open={Boolean(filterAnchorEl)}
+                        onClose={handleFilterClose}
+                    >
+                        <MenuItem onClick={() => handleFilterColumnToggle('taiKhoan')}>
+                            <Checkbox checked={filterColumns.includes('taiKhoan')} />
+                            Account
+                        </MenuItem>
+                        <MenuItem onClick={() => handleFilterColumnToggle('hoTen')}>
+                            <Checkbox checked={filterColumns.includes('hoTen')} />
+                            Full Name
+                        </MenuItem>
+                        <MenuItem onClick={() => handleFilterColumnToggle('email')}>
+                            <Checkbox checked={filterColumns.includes('email')} />
+                            Email
+                        </MenuItem>
+                        <MenuItem onClick={() => handleFilterColumnToggle('soDT')}>
+                            <Checkbox checked={filterColumns.includes('soDT')} />
+                            Phone Number
+                        </MenuItem>
+                    </Menu>
                 </div>
 
                 <button className="w-full md:w-auto bg-linear-to-r from-green-400 to-teal-500 
@@ -101,6 +230,16 @@ const Users = () => {
                 <table className="min-w-full divide-y divide-blue-300">
                     <thead className="bg-blue-300">
                         <tr>
+                            <th padding="checkbox">
+                                <Checkbox
+                                    indeterminate={
+                                        paginatedQuanTriData && quanTriSelected.length > 0 && quanTriSelected.length < paginatedQuanTriData.length
+                                    }
+                                    checked={paginatedQuanTriData && paginatedQuanTriData.length > 0 && quanTriSelected.length === paginatedQuanTriData.length}
+                                    onChange={handleQuanTriSelectAllClick}
+                                    inputProps={{ 'aria-label': 'select all desserts' }}
+                                />
+                            </th>
                             <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</th>
                             <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider max-w-[150px] wrap-break-word">Full Name</th>
                             <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider max-w-[200px] wrap-break-word">Email</th>
@@ -111,9 +250,16 @@ const Users = () => {
                     </thead>
 
                     <tbody className="bg-blue-300 divide-y divide-blue-300">
-                        {renderUsers(quanTriUsers)}
+                        {renderUsers(paginatedQuanTriData, true)}
                     </tbody>
                 </table>
+                <Pagination
+                    count={quanTriCount}
+                    page={page}
+                    onChange={(event, value) => setPage(value)}
+                    color="primary"
+                    className="mt-4 flex justify-center"
+                />
             </div>
 
             <div className="bg-blue-300 p-6 rounded-lg shadow-lg overflow-x-auto">
@@ -121,6 +267,16 @@ const Users = () => {
                 <table className="min-w-full divide-y divide-blue-300">
                     <thead className="bg-blue-300">
                         <tr>
+                            <th padding="checkbox">
+                                <Checkbox
+                                    indeterminate={
+                                        paginatedKhachHangData && khachHangSelected.length > 0 && khachHangSelected.length < paginatedKhachHangData.length
+                                    }
+                                    checked={paginatedKhachHangData && paginatedKhachHangData.length > 0 && khachHangSelected.length === paginatedKhachHangData.length}
+                                    onChange={handleKhachHangSelectAllClick}
+                                    inputProps={{ 'aria-label': 'select all desserts' }}
+                                />
+                            </th>
                             <th className="px-6 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</th>
                             <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider max-w-[150px] wrap-break-word">Full Name</th>
                             <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider max-w-[200px] wrap-break-word">Email</th>
@@ -131,9 +287,16 @@ const Users = () => {
                     </thead>
 
                     <tbody className="bg-blue-300 divide-y divide-blue-300">
-                        {renderUsers(khachHangUsers)}
+                        {renderUsers(paginatedKhachHangData, false)}
                     </tbody>
                 </table>
+                <Pagination
+                    count={khachHangCount}
+                    page={khachHangPage}
+                    onChange={(event, value) => setKhachHangPage(value)}
+                    color="primary"
+                    className="mt-4 flex justify-center"
+                />
             </div>
         </div>
     )
