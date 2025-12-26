@@ -204,10 +204,29 @@ const Movies = () => {
                         placeholder="Search Movie..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
+                        sx={{
+                            '& .MuiOutlinedInput-root': {
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'white',
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'white',
+                                },
+                                '& fieldset': {
+                                    borderColor: 'gray',
+                                },
+                            },
+                            '& .MuiInputBase-input': {
+                                color: 'white',
+                            },
+                            '& .MuiInputLabel-root': {
+                                color: 'white',
+                            },
+                        }}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <Search />
+                                    <Search sx={{ color: 'white' }} />
                                 </InputAdornment>
                             ),
                         }}
