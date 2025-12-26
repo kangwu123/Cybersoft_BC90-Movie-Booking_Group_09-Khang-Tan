@@ -128,13 +128,13 @@ const Contact = () => {
                             Contact Information
                         </Typography>
                         <Typography variant="body1" sx={{ mb: 2 }}>
-                            <strong>Address:</strong> 123 Movie Lane, Cinema City, 45678
+                            <strong>Address:</strong> 15 Trần Khắc Chân Phường Tân Định,TP.HCM
                         </Typography>
                         <Typography variant="body1" sx={{ mb: 2 }}>
-                            <strong>Phone:</strong> (123) 456-7890
+                            <strong>Phone:</strong> (+84)768957156
                         </Typography>
                         <Typography variant="body1" sx={{ mb: 4 }}>
-                            <strong>Email:</strong> contact@moviebooking.com
+                            <strong>Email:</strong> khanggiavu250296@gmail.com
                         </Typography>
 
                         <Typography variant="h5" component="h3" gutterBottom>
