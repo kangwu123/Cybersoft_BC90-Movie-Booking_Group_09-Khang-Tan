@@ -5,6 +5,8 @@
 A web-based movie ticket booking application that allows users to browse movies, view showtimes, book tickets, and manage accounts.  
 This project is developed as part of the **Cybersoft Front-End React BC90 Capstone**.
 
+If Any Problem for Web Page related Cache Browser or anything wrong just clear cache History Browser & F5 refresh page
+
 ---
 
 ## 👥 Team Members
